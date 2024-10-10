@@ -125,7 +125,7 @@ class SudokuSolver:
             self.ent_start_paste.pack()
 
             self.lbl_start_paste_ex = tk.Text(master=self.frm_bot, font=('TkDefaultFont', 8), height = 2, width = 45, relief = 'flat', bg = '#F0F0F0')
-            self.lbl_start_paste_ex.insert(1.0, "e.g. 306508400520000000087000031003010080900863005050090600130000250000000074005206300")
+            self.lbl_start_paste_ex.insert(1.0, "e.g. 720096003000205000080004020000000060106503807040000000030800090000702000200430018")
             self.lbl_start_paste_ex.pack()
             self.lbl_start_paste_ex.configure(state='disabled')
 
