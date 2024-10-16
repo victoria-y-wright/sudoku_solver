@@ -5,14 +5,7 @@ os.chdir("3D Sudoku Solver")
 import tkinter as tk
 from copy import deepcopy
 
-from modules import board_set_up
-from modules import grid_set_up
-from modules import error_flags
-from modules import legal
-from modules import brute_force
-from modules import candidates
-from modules import constraints
-from modules import windows_set_up
+from modules import windows_set_up, examples, board_set_up, grid_set_up, error_flags, legal, brute_force, candidates, constraints
 
 
 class SudokuSolver3D:
@@ -24,36 +17,15 @@ class SudokuSolver3D:
         windows_set_up.window_1(self)
         error_flags.set_up(self)
         self.candidates_found = False
+        self.grid_all_squares = []
 
 
-    def start_example_click(self):
-        self.frm_example.pack_forget()
-
-        existing_face_index_list = [0, 0, 0, 1, 1, 5, 6]
-        new_type_list = ['left', 'left', 'right', 'left', 'left', 'left', 'top']
-        new_location_list = ['right above', 'left below', 'right below', 'left', 'right', 'below', 'below']
-
-        for ef_index, new_type, new_location in zip(existing_face_index_list, new_type_list, new_location_list):
-            board_set_up.new_face(self, self.faces[ef_index], new_type, new_location)
-        
-        try: 
-            self.cnv_buttons.pack_forget()
-        except:
-            pass
-
-        for line in self.lines:
-            self.cnv_board.delete(line)
-
-        grid_set_up.create_grid(self)
-        grid_set_up.add_elements(self)
-
-        pos_list = [(0,0), (0,5), (0,6), (1,1), (1,6), (2,0), (2,8), (3,0), (3,2), (3,7), (4,0), (4,1), (4,3), (4,5), (4,6), (4,8), (5,3), (5,7), (6,2), (6,3), (6,5), (6,7), (7,4), (7,8)]
-        num_list = [1, 9, 3, 8, 2, 5, 4, 9, 1, 5, 2, 6, 1, 5, 9, 3, 6, 1, 4, 5, 8, 9, 6, 2]
-        for pos, num in zip(pos_list, num_list):
-            grid_set_up.set_number(self, pos, num)
-
-        self.start_click()
-
+    def start_example_click(self, event):
+        if event.widget == self.btn_ex_1:
+            examples.start(self,1)
+        elif event.widget == self.btn_ex_2:
+            examples.start(self,2)
+            
     def face_click(self,event):
         board_set_up.choose_face_to_add(self,event)
 
@@ -65,19 +37,21 @@ class SudokuSolver3D:
 
     def start_board_click(self):
         error_flags.reset(self)
-        self.frm_example.pack_forget()
-        try: 
-            self.cnv_buttons.pack_forget()
-        except:
-            pass
         
         if len(self.faces) == 1:
             error_flags.flag(self,5)
         elif not board_set_up.check_3d_board_valid(self):
             error_flags.flag(self,6)
         else:
+            self.frm_example.pack_forget()
+            self.frm_labels.pack_forget()
             grid_set_up.create_grid(self)
             grid_set_up.add_elements(self)
+
+            ## resize canvas
+            region = self.cnv_board.bbox("all")
+            self.cnv_board.configure(width = region[2]-region[0]+30, height=region[3]-region[1])
+            self.window.maxsize(region[2]-region[0]+420, 600)
 
     def square_click(self,event):
         grid_set_up.input_number(self)
@@ -102,6 +76,7 @@ class SudokuSolver3D:
 
                 self.initial_grid = deepcopy(self.grid)
                 self.btn_start.pack_forget()
+                self.lbl_entry_click.pack_forget()
                 windows_set_up.window_2(self)
     
     def brute_force_click(self):

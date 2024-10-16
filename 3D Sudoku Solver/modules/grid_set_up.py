@@ -61,17 +61,7 @@ def create_grid(self):
 
 def add_elements(self):
     self.btn_start_board.pack_forget()
-
-    self.frm_entry = tk.Frame(master=self.frm_controls)
-
-    self.lbl_entry = tk.Label(master = self.frm_entry, text='Type in the number for this square: ', font = ('TkDefaultFont', 12))
-    self.lbl_entry.grid(row = 0, column = 0)
-    
-    self.entry_text = tk.StringVar()
-    self.ent_entry = tk.Entry(master=self.frm_entry, width = 3, justify= "center", textvariable= self.entry_text, font = ('TkDefaultFont', 15, 'bold'), relief = 'flat')
-    self.ent_entry.grid(row = 0, column = 1)
-    self.ent_entry.bind('<Return>', self.enter_number_click)
-
+    self.cnv_board.configure(closeenough=1)
     self.squares = [[None]*9 for face in self.faces]
     self.shp_square = [[None]*9 for face in self.faces]
     
@@ -94,10 +84,12 @@ def add_elements(self):
         for i in range(4):
             self.shp_board_lines.append(self.cnv_board.create_line(face.edges[i], width = 2, capstyle = 'round'))
             self.shp_board_lines.append(self.cnv_board.create_line(face.grid_lines[i], width = 1, capstyle = 'round'))
-
-    self.btn_start.pack()
+    
+    self.lbl_entry_click.pack()
+    self.btn_start.pack(pady=30, side = 'bottom')
     
 def input_number(self):
+    
     for pos in self.grid_all_squares:
         i, j = pos[0], pos[1]
         self.cnv_board.itemconfigure(self.shp_square[i][j], fill = 'white')

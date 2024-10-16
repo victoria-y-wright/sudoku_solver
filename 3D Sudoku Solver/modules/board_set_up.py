@@ -20,7 +20,7 @@ class Face:
         self.vertices = []
         
         for i,j in zip([-3/2,-3/2,+3/2,+3/2],[-3/2,+3/2,+3/2,-3/2]):
-            self.vertices.extend([centre[0] + i*dx_prime[0] + j*dy_prime[0], centre[1] + i*dx_prime[1] + j*dy_prime[1]])
+            self.vertices.extend([round(centre[0] + i*dx_prime[0] + j*dy_prime[0],2), round(centre[1] + i*dx_prime[1] + j*dy_prime[1],2)])
     
         self.edges = []
         for start, end in zip([0,2,4,6], [2,4,6,0]):
@@ -54,9 +54,13 @@ def choose_face_to_add(self, event):
 
     self.existing_face = self.faces[self.shp_face.index(item)]
     
+    self.lbl_choose_face.pack()
     self.cnv_buttons.pack()
 
 def choose_where_add(self, event):
+
+    self.lbl_choose_where.pack()
+
     for line in self.lines:
         self.cnv_board.delete(line)
 
@@ -112,7 +116,9 @@ def add_new_face(self, event):
     ## reset everything
     self.cnv_board.itemconfigure(self.shp_face[self.faces.index(self.existing_face)], fill = 'white')
     self.cnv_buttons.itemconfigure(self.button_shapes[self.buttons.index(self.picked_button)], outline = 'black')
+    self.lbl_choose_face.pack_forget()
     self.cnv_buttons.pack_forget()
+    self.lbl_choose_where.pack_forget()
     for line in self.lines:
         self.cnv_board.delete(line)
 
@@ -185,9 +191,9 @@ def new_face(self, existing_face, new_type, new_location):
     if self.cnv_board.find_overlapping(self.x_offset, 500 + self.y_offset, 600 + self.x_offset, 500 + self.y_offset):
         self.y_offset -= 120
     if self.cnv_board.find_overlapping(self.x_offset,self.y_offset, self.x_offset, 500 + self.y_offset):
-        self.x_offset += 50
+        self.x_offset += 80
     if self.cnv_board.find_overlapping(600 + self.x_offset,self.y_offset, 600 + self.x_offset, 500 + self.y_offset):
-        self.x_offset -= 50
+        self.x_offset -= 80
 
     ## update neighbours 
     for face in self.faces[:-1]:
@@ -204,6 +210,8 @@ def check_3d_board_valid(self):
                 neighbouring_face_index =  self.faces[face_index].neighbours[i]
                 neighbouring_face = self.faces[neighbouring_face_index]
                 if (face.neighbours[i-2] is None) == (neighbouring_face.neighbours[neighbouring_face.neighbours.index(face_index)-2] is None):
+                    self.cnv_board.itemconfigure(self.shp_face[face_index], fill = 'pink')
+                    self.cnv_board.itemconfigure(self.shp_face[neighbouring_face_index], fill = 'pink')
                     return False
     return True
 

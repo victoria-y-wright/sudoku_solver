@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 
 from modules import board_set_up
 
@@ -18,7 +19,7 @@ def window_1(self):
 
         self.x_offset = 0
         self.y_offset = 0
-        self.cnv_board = tk.Canvas(master = self.frm_board, bd =2, width = '600', height = '500')
+        self.cnv_board = tk.Canvas(master = self.frm_board, bd =2, width = '600', height = '550', closeenough=20)
 
         self.side_length = 120
 
@@ -36,36 +37,70 @@ def window_1(self):
         self.cnv_board.pack()
         self.frm_board.grid(row = 1, column= 0, padx = 15, pady = 5)
 
-        self.btn_start_board = tk.Button(master = self.frm_board, text = "Start with board", font=('TkDefaultFont', 10), command = self.start_board_click)
-        self.btn_start_board.pack()
-
     set_up_board(self)
 
     def set_up_controls(self):
         self.frm_controls = tk.Frame(height = 500, width = 300, highlightbackground='black', highlightthickness=1)
         self.frm_controls.pack_propagate(False)
+        self.frm_controls.grid(row = 1, column = 1, padx = 15)
+        
+        self.frm_labels = tk.Frame(master = self.frm_controls)
+        self.frm_labels.pack()
+        self.lbl_controls = tk.Label(master=self.frm_labels, text="← Click on a face to add its neighbour", font=('TkDefaultFont', 12), pady=10)
+        self.lbl_controls.pack()
+        
+        self.lbl_choose_face = tk.Label(master=self.frm_labels, text="↓ Choose the type of face to add", font=('TkDefaultFont', 12), pady=10)
 
-        self.cnv_buttons = tk.Canvas(master= self.frm_controls, height = 200, width = 300)
+        self.lbl_choose_where = tk.Label(master=self.frm_labels, text="← Click on the side it should connect to", font=('TkDefaultFont', 12), pady=10)
 
-        self.buttons = [board_set_up.Face('top', (50,140), 50), board_set_up.Face('left', (150,140), 50), board_set_up.Face('right', (250,140), 50)]
+        self.btn_start_board = tk.Button(master = self.frm_controls, text = "Start with board", font=('TkDefaultFont', 10), command = self.start_board_click)
+
+        ## face buttons ##
+        self.cnv_buttons = tk.Canvas(master= self.frm_labels, height = 80, width = 300, closeenough=10)
+
+        self.buttons = [board_set_up.Face('top', (50,40), 50), board_set_up.Face('left', (150,40), 50), board_set_up.Face('right', (250,40), 50)]
 
         self.button_shapes = []
         for button in self.buttons:
             self.button_shapes.append(self.cnv_buttons.create_polygon(button.vertices, fill = 'white', outline = 'black', activeoutline='darkseagreen3'))
             self.cnv_buttons.tag_bind(self.button_shapes[-1], '<Button-1>', self.button_click)
 
-        self.frm_controls.grid(row = 1, column = 1, padx = 15)
+        ## example boards ##
+        self.frm_example = tk.Frame(master = self.frm_controls, pady= 20)
+        self.lbl_example = tk.Label(master=self.frm_example, text="OR try an example board:", font=('TkDefaultFont', 12))
+        self.lbl_example.grid(row = 0, column= 0, columnspan= 2)
         
-        self.frm_example = tk.Frame(master = self.frm_controls)
-        self.lbl_start_example = tk.Label(master=self.frm_example, text="OR try the example:", font=('TkDefaultFont', 10))
-        self.lbl_start_example.pack()
+        load = Image.open('images/ex1.png').resize((100,100))
+        img_ex_1 = ImageTk.PhotoImage(load)
+        self.btn_ex_1 = tk.Button(master=self.frm_example, image=img_ex_1)
+        self.btn_ex_1.bind('<Button-1>', self.start_example_click)
+        self.btn_ex_1.image = img_ex_1
+        self.btn_ex_1.grid(row = 1, column= 0, padx = 10)
 
-        self.btn_start_example = tk.Button(master=self.frm_example, text="Start example", font=('TkDefaultFont', 10), command = self.start_example_click)
-        self.btn_start_example.pack()
-        self.frm_example.pack()
+        load = Image.open('images/ex2.png').resize((100,100))
+        img_ex_2 = ImageTk.PhotoImage(load)
+        self.btn_ex_2 = tk.Button(master=self.frm_example, image=img_ex_2)
+        self.btn_ex_2.bind('<Button-1>', self.start_example_click)
+        self.btn_ex_2.image = img_ex_2
+        self.btn_ex_2.grid(row = 1, column= 1, padx = 10)
 
-        self.btn_start = tk.Button(master = self.frm_board, text = "Start", font = ('TkDefaultFont', 10), command = self.start_click)
+        self.frm_example.pack(side = 'bottom')
+        self.btn_start_board.pack(side = 'bottom', pady = (0,70))
 
+        ## number entry ##
+        self.frm_entry = tk.Frame(master=self.frm_controls)
+
+        self.lbl_entry_click = tk.Label(master=self.frm_controls, text="← Choose a square to input known value", font=('TkDefaultFont', 12), pady=10)
+
+        self.lbl_entry = tk.Label(master = self.frm_entry, text='            → Type in the number: ', font = ('TkDefaultFont', 12))
+        self.lbl_entry.grid(row = 0, column = 0)
+        
+        self.entry_text = tk.StringVar()
+        self.ent_entry = tk.Entry(master=self.frm_entry, width = 3, justify= "center", textvariable= self.entry_text, font = ('TkDefaultFont', 15, 'bold'), relief = 'flat')
+        self.ent_entry.grid(row = 0, column = 1)
+        self.ent_entry.bind('<Return>', self.enter_number_click)
+        
+        self.btn_start = tk.Button(master = self.frm_controls, text = "Start", font = ('TkDefaultFont', 10), command = self.start_click)
     set_up_controls(self)
 
 
