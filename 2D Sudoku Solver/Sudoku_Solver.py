@@ -5,7 +5,7 @@ import tkinter as tk
 from copy import deepcopy
 
 from modules import error_flags
-from modules import board_input
+from modules import legal
 from modules import brute_force
 from modules import constraints
 from modules import candidates
@@ -140,10 +140,10 @@ class SudokuSolver:
     def start_click(self,event):
         error_flags.reset(self)
         
-        legal = False
+        board_legal = False
         if event.widget == self.btn_start: #start button
-            if board_input.is_legal(self):
-                legal = True
+            if legal.board_is_legal(self):
+                board_legal = True
                 for i in range(9):
                     for j in range(9):
                         if len(self.ent_number[i][j].get()) != 0:
@@ -153,7 +153,7 @@ class SudokuSolver:
         elif event.widget == self.btn_start_paste: #paste start button
             paste_list = self.ent_start_paste.get().strip()
             if paste_list.isdigit() and len(paste_list) == 81:
-                legal = True
+                board_legal = True
                 for i in range(9):
                     for j in range(9):
                         self.grid[i][j] = int(paste_list[i*9+j])
@@ -164,8 +164,8 @@ class SudokuSolver:
             else:
                 error_flags.flag(self, 3)
     
-        if legal == True:
-            if board_input.follows_rules(self):
+        if board_legal == True:
+            if legal.board_follows_rules(self):
                     for i in range(9):
                         for j in range(9):
                             if self.grid[i][j] != 0:

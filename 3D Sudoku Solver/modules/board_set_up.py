@@ -196,8 +196,6 @@ def new_face(self, existing_face, new_type, new_location):
             self.faces[-1].neighbours[self.faces[-1].edges.index(shared_edges[0])] = self.faces.index(face)
             face.neighbours[face.edges.index(shared_edges[0])] = len(self.faces) - 1
 
-
-
 def check_3d_board_valid(self):
     for face_index in range(len(self.faces)):
         face = self.faces[face_index]
