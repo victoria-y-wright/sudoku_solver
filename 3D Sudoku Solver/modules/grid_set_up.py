@@ -1,6 +1,4 @@
-import tkinter as tk
 from modules import board_set_up
-from ctypes import windll
 from modules import error_flags
 
 def create_grid(self):
