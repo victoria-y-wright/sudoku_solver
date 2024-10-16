@@ -1,5 +1,5 @@
 import os
-os.chdir("python_script")
+os.chdir("2D Sudoku Solver")
 
 import tkinter as tk
 from copy import deepcopy
@@ -170,7 +170,7 @@ class SudokuSolver:
                         for j in range(9):
                             if self.grid[i][j] != 0:
                                     self.ent_number[i][j].config(state=tk.DISABLED)
-                            if self.grid[i][j] == 0:
+                            else:
                                 self.entry_text[i][j].set('')
                     self.initial_grid = deepcopy(self.grid)
                     
@@ -182,23 +182,19 @@ class SudokuSolver:
 ### window 2 ###
     def set_up_window_2(self):
 
-        self.btn_brute_force = tk.Button(master=self.frm_body_buttons, text="Solve with brute force", font=('TkDefaultFont', 10))
-        self.btn_brute_force.bind("<Button-1>", self.brute_force_click)
+        self.btn_brute_force = tk.Button(master=self.frm_body_buttons, text="Solve with brute force", font=('TkDefaultFont', 10), command = self.brute_force_click)
 
         self.var_show_iterating = tk.IntVar()
         self.chk_show_iterating = tk.Checkbutton(master = self.frm_body_buttons, text = "show backtracking", variable = self.var_show_iterating, onvalue = 1, offvalue = 0)
         self.chk_show_iterating.select()
 
-        self.btn_back_to_initial = tk.Button(master=self.frm_body, text="Back", font=('TkDefaultFont', 8))
-        self.btn_back_to_initial.bind("<Button-1>", self.back_to_initial_click)
+        self.btn_back_to_initial = tk.Button(master=self.frm_body, text="Back", font=('TkDefaultFont', 8), command = self.back_to_initial_click)
 
-        self.btn_candidates = tk.Button(master=self.frm_body_buttons, text="Find candidates", font=('TkDefaultFont', 10))
-        self.btn_candidates.bind("<Button-1>", self.candidates_click)    
+        self.btn_candidates = tk.Button(master=self.frm_body_buttons, text="Find candidates", font=('TkDefaultFont', 10), command = self.candidates_click)    
         
         self.frm_constr = tk.Frame(master = self.frm_body_buttons)
 
-        self.btn_apply_constr = tk.Button(master=self.frm_constr, text="Apply constraints", font=('TkDefaultFont', 10))
-        self.btn_apply_constr.bind("<Button-1>", self.apply_constr_click)
+        self.btn_apply_constr = tk.Button(master=self.frm_constr, text="Apply constraints", font=('TkDefaultFont', 10), command = self.apply_constr_click)
         self.btn_apply_constr.grid(row = 0, column = 0, columnspan= 3, pady = (0, 5))
 
         constr_text_list = ["sole candidates", "hidden singles", "naked pairs", "naked triples", "hidden pairs", "hidden triples"]
@@ -224,7 +220,7 @@ class SudokuSolver:
         self.frm_constr.grid(row = 2, column = 0, columnspan=2, pady = (20,10))
 
 ### brute force ###
-    def brute_force_click(self, event):
+    def brute_force_click(self):
         error_flags.reset(self)
 
         self.frm_body_buttons.pack_forget()
@@ -258,7 +254,7 @@ class SudokuSolver:
             lbl_no_sol = tk.Label(master=self.frm_body, text="No solution", font=('TkDefaultFont', 14, 'bold'))
             lbl_no_sol.pack()
 
-    def back_to_initial_click(self, event):
+    def back_to_initial_click(self):
         self.btn_back_to_initial.pack_forget()
         self.lbl_sol.pack_forget()
         self.frm_body.pack_forget()
@@ -276,11 +272,11 @@ class SudokuSolver:
         self.window.update()
 
 ### constraints ###
-    def candidates_click(self, event):
+    def candidates_click(self):
         candidates.find_all(self)
         self.btn_candidates.configure(state='disabled')
 
-    def apply_constr_click(self, event):
+    def apply_constr_click(self):
 
         error_flags.reset(self)
         if self.candidates_found == False:

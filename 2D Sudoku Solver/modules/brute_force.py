@@ -9,7 +9,7 @@ def rec_solve(self, index):
         row, col = pos[0], pos[1]
         
         if self.grid[row][col] != 0:            # if already filled move on to next square 
-            return self.rec_solve(index+1)
+            return rec_solve(self, index+1)
 
         cands = range(1,10) if self.candidates_found == False else self.candidates[(row,col)]
         for num in cands:
@@ -22,7 +22,7 @@ def rec_solve(self, index):
                         self.ent_number[row][col].pack()
                         self.window.update()
                     self.window.after(10,self.window.update())
-                if self.rec_solve(index+1):
+                if rec_solve(self, index+1):
                     return True
             self.grid[row][col] = 0
             if self.var_show_iterating.get() == 1:
