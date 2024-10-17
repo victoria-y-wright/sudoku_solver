@@ -1,4 +1,3 @@
-import tkinter as tk
 from collections import defaultdict
 
 from modules import legal
