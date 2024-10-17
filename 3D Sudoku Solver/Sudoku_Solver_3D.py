@@ -12,7 +12,7 @@ class SudokuSolver3D:
     def __init__(self, window):
         self.window = window
         self.window.title("3D Sudoku Solver")
-        self.window.geometry("1000x600")
+        self.window.geometry("1050x600")
 
         windows_set_up.window_1(self)
         error_flags.set_up(self)
@@ -25,6 +25,8 @@ class SudokuSolver3D:
             examples.start(self,1)
         elif event.widget == self.btn_ex_2:
             examples.start(self,2)
+        elif event.widget == self.btn_ex_3:
+            examples.start(self,3)
             
     def face_click(self,event):
         board_set_up.choose_face_to_add(self,event)

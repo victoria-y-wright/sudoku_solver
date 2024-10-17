@@ -19,7 +19,7 @@ def window_1(self):
 
         self.x_offset = 0
         self.y_offset = 0
-        self.cnv_board = tk.Canvas(master = self.frm_board, bd =2, width = '600', height = '550', closeenough=20)
+        self.cnv_board = tk.Canvas(master = self.frm_board, bd =2, width = '650', height = '550', closeenough=20)
 
         self.side_length = 120
 
@@ -49,9 +49,9 @@ def window_1(self):
         self.lbl_controls = tk.Label(master=self.frm_labels, text="← Click on a face to add its neighbour", font=('TkDefaultFont', 12), pady=10)
         self.lbl_controls.pack()
         
-        self.lbl_choose_face = tk.Label(master=self.frm_labels, text="↓ Choose the type of face to add", font=('TkDefaultFont', 12), pady=10)
+        self.lbl_choose_face = tk.Label(master=self.frm_labels, text="↓ Choose the type of face to add", font=('TkDefaultFont', 12), pady=5)
 
-        self.lbl_choose_where = tk.Label(master=self.frm_labels, text="← Click on the side it should connect to", font=('TkDefaultFont', 12), pady=10)
+        self.lbl_choose_where = tk.Label(master=self.frm_labels, text="← Click on the side it should connect to", font=('TkDefaultFont', 12), pady=5)
 
         self.btn_start_board = tk.Button(master = self.frm_controls, text = "Start with board", font=('TkDefaultFont', 10), command = self.start_board_click)
 
@@ -75,17 +75,24 @@ def window_1(self):
         self.btn_ex_1 = tk.Button(master=self.frm_example, image=img_ex_1)
         self.btn_ex_1.bind('<Button-1>', self.start_example_click)
         self.btn_ex_1.image = img_ex_1
-        self.btn_ex_1.grid(row = 1, column= 0, padx = 10)
+        self.btn_ex_1.grid(row = 2, column= 0, padx = 10)
 
         load = Image.open('images/ex2.png').resize((100,100))
         img_ex_2 = ImageTk.PhotoImage(load)
         self.btn_ex_2 = tk.Button(master=self.frm_example, image=img_ex_2)
         self.btn_ex_2.bind('<Button-1>', self.start_example_click)
         self.btn_ex_2.image = img_ex_2
-        self.btn_ex_2.grid(row = 1, column= 1, padx = 10)
+        self.btn_ex_2.grid(row = 2, column= 1, padx = 10)
+
+        load = Image.open('images/ex3.png').resize((128,78))
+        img_ex_3 = ImageTk.PhotoImage(load)
+        self.btn_ex_3 = tk.Button(master=self.frm_example, image=img_ex_3)
+        self.btn_ex_3.bind('<Button-1>', self.start_example_click)
+        self.btn_ex_3.image = img_ex_3
+        self.btn_ex_3.grid(row = 1, column= 0, columnspan = 2, pady = 10)
 
         self.frm_example.pack(side = 'bottom')
-        self.btn_start_board.pack(side = 'bottom', pady = (0,70))
+        self.btn_start_board.pack(side = 'bottom', pady = (0,5))
 
         ## number entry ##
         self.frm_entry = tk.Frame(master=self.frm_controls)
