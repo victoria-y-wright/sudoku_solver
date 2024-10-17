@@ -141,7 +141,7 @@ def add_constraint(self, pos_list, group_index, cand_list, remove_list, method):
             if self.grid[pos[0]][pos[1]] == 0:
                 if pos in pos_list:
                     for num in cand_list:
-                        self.lbl_cand_squares[pos[0]][pos[1]][num-1].configure(bg='white')
+                        self.lbl_cand_squares[pos[0]][pos[1]][num-1].configure(bg= sec_colour)
                 else:
                     for num in cand_list:
                         self.lbl_cand_squares[pos[0]][pos[1]][num-1].configure(bg = 'white')

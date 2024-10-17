@@ -143,7 +143,7 @@ def add_constraint(self, pos_list, group_index, cand_list, remove_list, method):
             if self.grid[pos[0]][pos[1]] == 0:
                 if pos in pos_list:
                     for num in cand_list:
-                        self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = 'white')
+                        self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = sec_colour)
                 else:
                     for num in cand_list:
                         self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = 'white')
