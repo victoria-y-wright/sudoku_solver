@@ -12,7 +12,7 @@ class SudokuSolver3D:
     def __init__(self, window):
         self.window = window
         self.window.title("3D Sudoku Solver")
-        self.window.geometry("1050x600")
+        self.window.geometry("1050x650")
 
         windows_set_up.window_1(self)
         error_flags.set_up(self)
@@ -53,7 +53,7 @@ class SudokuSolver3D:
             ## resize canvas
             region = self.cnv_board.bbox("all")
             self.cnv_board.configure(width = region[2]-region[0]+30, height=region[3]-region[1])
-            self.window.maxsize(region[2]-region[0]+420, 600)
+            self.window.maxsize(region[2]-region[0]+420, 650)
 
     def square_click(self,event):
         grid_set_up.input_number(self)

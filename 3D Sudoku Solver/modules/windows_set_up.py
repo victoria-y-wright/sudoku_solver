@@ -18,7 +18,7 @@ def window_1(self):
 
         self.x_offset = 0
         self.y_offset = 0
-        self.cnv_board = tk.Canvas(master = self.frm_board, bd =2, width = '650', height = '550', closeenough=20)
+        self.cnv_board = tk.Canvas(master = self.frm_board, bd =2, width = '650', height = '600', closeenough=20)
 
         self.side_length = 120
 
