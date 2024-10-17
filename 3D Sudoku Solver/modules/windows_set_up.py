@@ -1,5 +1,4 @@
 import tkinter as tk
-from PIL import Image, ImageTk
 
 from modules import board_set_up
 
@@ -70,22 +69,19 @@ def window_1(self):
         self.lbl_example = tk.Label(master=self.frm_example, text="OR try an example board:", font=('TkDefaultFont', 12))
         self.lbl_example.grid(row = 0, column= 0, columnspan= 2)
         
-        load = Image.open('images/ex1.png').resize((100,100))
-        img_ex_1 = ImageTk.PhotoImage(load)
+        img_ex_1 = tk.PhotoImage(file = 'images/ex1_resized.png')
         self.btn_ex_1 = tk.Button(master=self.frm_example, image=img_ex_1)
         self.btn_ex_1.bind('<Button-1>', self.start_example_click)
         self.btn_ex_1.image = img_ex_1
         self.btn_ex_1.grid(row = 2, column= 0, padx = 10)
 
-        load = Image.open('images/ex2.png').resize((100,100))
-        img_ex_2 = ImageTk.PhotoImage(load)
+        img_ex_2 = tk.PhotoImage(file = 'images/ex2_resized.png')
         self.btn_ex_2 = tk.Button(master=self.frm_example, image=img_ex_2)
         self.btn_ex_2.bind('<Button-1>', self.start_example_click)
         self.btn_ex_2.image = img_ex_2
         self.btn_ex_2.grid(row = 2, column= 1, padx = 10)
 
-        load = Image.open('images/ex3.png').resize((128,78))
-        img_ex_3 = ImageTk.PhotoImage(load)
+        img_ex_3 = tk.PhotoImage(file = 'images/ex3_resized.png')
         self.btn_ex_3 = tk.Button(master=self.frm_example, image=img_ex_3)
         self.btn_ex_3.bind('<Button-1>', self.start_example_click)
         self.btn_ex_3.image = img_ex_3
