@@ -7,7 +7,9 @@
 
 <br/> 
 
-## What's the point of a Sudoku solver?
+## Background and Introduction
+
+### What's the point of a Sudoku solver?
 
 On the surface, Sudoku solvers seem like a simple way to show off computing power. After all, they can provide the full solution to a Sudoku in the time a person takes to write in the first number. But as anyone who enjoys Sudokus knows, we don't fill them out just to *see* the answer- or we may as well just flick to the back of the puzzle book or wait for the next newspaper edition to arive with the solutions. The fun, and the whole point, of Sudokus is the *process* of puzzling through the logic to work out the solution for yourself. So how is a computer program written to solve Sudokus at all relevant to people who want to do the puzzles themselves?
 
@@ -15,11 +17,13 @@ The best Sudoku solving programs don't just spit out answers (although this is s
 
 <br/>
 
-## Classic (2D) Sudoku Solver
+### Classic (2D) Sudoku Solver
 
-There are countless brilliant Sudoku solving programs already out there- notable web-based resources include the [SudokuWiki solver](https://www.sudokuwiki.org/Sudoku.htm) and [Sudoku.coach](https://sudoku.coach/en/solver). When setting out to make a 3D Sudoku solver (see below), a useful first step was programming my own version of the simpler, classic 2D solver. It has a clean, simple GUI which takes in user-inputted puzzles (either typed into the grid, or pasted in as a string of 81 numbers, with empty squares as 0). The user chooses which (combination of)strategies the solver should use, and strategies are demonstrated visually as they are applied to the puzzle.  
+There are countless brilliant Sudoku solving programs already out there- notable web-based resources include the [SudokuWiki solver](https://www.sudokuwiki.org/Sudoku.htm) and [Sudoku.coach](https://sudoku.coach/en/solver). When setting out to make a 3D Sudoku solver (see below), a useful first step was programming my own version of the simpler, classic 2D solver. It has a clean, simple GUI which takes in user-inputted puzzles (either typed into the grid, or pasted in as a string of 81 numbers, with empty squares as 0). The user chooses which (combination of) strategies the solver should use, and strategies are demonstrated visually as they are applied to the puzzle.  
 
-## 3D Sudoku (Tredoku) Solver
+<br/> 
+
+### 3D Sudoku (Tredoku) Solver
 
 The 3D Sudoku (or Tredoku) is a variant of the original puzzle, where the grid is 3D- represented by faces of isometric cubes- so that the traditional 9-square rows and columns cross over surfaces of different orientations and overlap in different ways. Tredoku puzzles are published weekly in the Times, and they are a fun extension to the traditional game; further variety comes from the fact that the three-dimensional boards can take many different shapes. I love doing these 3D Sudokus, but I couldn't find any solve-assisting tools like those online for classic Sudoku. 
 
@@ -68,6 +72,6 @@ Excellent descriptions of these Sudoku solving strategies (and many others) can 
 <br/> 
 
 ## Next Steps
-[] Adding intersection removal strategy (particularly common for 3D Sudokus due to their board configuration)
+[-] Adding intersection removal strategy (particularly common for 3D Sudokus due to their board configuration)
 
-[] Adding a step-by-step button for adding of constraints
+[-] Adding a step-by-step button for adding of constraints
