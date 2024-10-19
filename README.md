@@ -22,7 +22,10 @@ In this project, I have created a 3D Sudoku solver with a GUI, where users can b
 
 # Key information
 ## Dependencies
-Only the standard Python Library is needed to run the solvers (packages/ modules used include tkinter, itertools, collections, copy and math).
+No dependencies are needed outside the standard Python Library (packages/ modules used include tkinter, itertools, collections, copy and math).
+
+## Download link
+[Click here to download the repository as zipped folder.](https://github.com/victoria-y-wright/sudoku_solver/archive/refs/heads/main.zip)
 
 ## Solving strategies
 
