@@ -5,13 +5,15 @@
 
 [Click here to skip to key information](#key-information)
 
+<br/> 
+
 ## What's the point of a Sudoku solver?
 
 On the surface, Sudoku solvers seem like a simple way to show off computing power. After all, they can provide the full solution to a Sudoku in the time a person takes to write in the first number. But as anyone who enjoys Sudokus knows, we don't fill them out just to *see* the answer- or we may as well just flick to the back of the puzzle book or wait for the next newspaper edition to arive with the solutions. The fun, and the whole point, of Sudokus is the *process* of puzzling through the logic to work out the solution for yourself. So how is a computer program written to solve Sudokus at all relevant to people who want to do the puzzles themselves?
 
 The best Sudoku solving programs don't just spit out answers (although this is something they should do- so you can check finished puzzle, or unpick a mistake), but they assist with and improve the hand-solving experience. The ideal Sudoku solver is a tool used for help if you get stuck, making solving more fun and less frustrating, and also used to improve your skills by learning more complex solving strategies. 
 
-<br/><br/> 
+<br/>
 
 ## Classic (2D) Sudoku Solver
 
@@ -23,6 +25,7 @@ The 3D Sudoku (or Tredoku) is a variant of the original puzzle, where the grid i
 
 In this project, I have created a 3D Sudoku solver with a GUI, where users can build the shape of their specific 3D board (checked for validity), enter in the starting numbers, choose which methods the program should apply, and see a visualisation of the solving process. 
 
+<br/> <br/> 
 
 # Key information
 
@@ -34,7 +37,7 @@ No dependencies are needed outside the standard Python Library (packages/ module
 
 [Click here to download the repository as zipped folder.](https://github.com/victoria-y-wright/sudoku_solver/archive/refs/heads/main.zip)
 
-<br/><br/> 
+<br/>
 
 ## Solving strategies
 
@@ -62,7 +65,7 @@ The strategies currently added include:
 
 Excellent descriptions of these Sudoku solving strategies (and many others) can be found at [SudokuWiki](https://www.sudokuwiki.org/Strategy_Families).
 
-<br/><br/> 
+<br/> 
 
 ## Next Steps
 [] Adding intersection removal strategy (particularly common for 3D Sudokus due to their board configuration)
