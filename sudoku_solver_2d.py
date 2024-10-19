@@ -285,10 +285,11 @@ class SudokuSolver:
             self.btn_candidates.configure(state='disabled')
 
         if constraints.solve_constraints(self):
+            self.frm_body.pack(pady=(0,20))
             self.frm_body_buttons.pack_forget()
             self.lbl_sol = tk.Label(master=self.frm_body, text="Solved", font=('TkDefaultFont', 14, 'bold'))
-            self.lbl_sol.pack()
-            self.btn_back_to_initial.pack()
+            self.lbl_sol.pack(pady=30)
+            self.btn_back_to_initial.pack(pady=20)
 
         else:
             error_flags.flag(self, 4)
