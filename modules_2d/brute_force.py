@@ -1,4 +1,4 @@
-from modules import legal
+from modules_2d import legal
 
 def rec_solve(self, index):
         

@@ -1,7 +1,7 @@
 import tkinter as tk
 from collections import defaultdict
 
-from modules import legal
+from modules_2d import legal
 
 def find_all(self):
     self.candidates = defaultdict(set)

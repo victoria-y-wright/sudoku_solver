@@ -1,11 +1,7 @@
-import os
-os.chdir("3D Sudoku Solver")
-
-
 import tkinter as tk
 from copy import deepcopy
 
-from modules import windows_set_up, examples, board_set_up, grid_set_up, error_flags, legal, brute_force, candidates, constraints
+from modules_3d import windows_set_up, examples, board_set_up, grid_set_up, error_flags, legal, brute_force, candidates, constraints
 
 
 class SudokuSolver3D:

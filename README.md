@@ -1,7 +1,7 @@
 # 3D Sudoku (Tredoku) Solver
 ***A tool to help fans of 3D Sudoku/ Tredoku (as found in the Times) improve their solving skills.***
 
-![Board creation](<3D Sudoku Solver/images/creating_board.gif>) ![Solving in action](<3D Sudoku Solver/images/solving_in_action.gif>)
+![Board creation](<images/creating_board.gif>) ![Solving in action](<images/solving_in_action.gif>)
 
 [Click here to skip to key information](#key-information)
 
@@ -22,7 +22,7 @@ In this project, I have created a 3D Sudoku solver with a GUI, where users can b
 
 # Key information
 ## Dependencies
-Only the standard Python Library is needed to run the solvers (packages/ modules used include tkinter, itertools, collections, copy, os and math).
+Only the standard Python Library is needed to run the solvers (packages/ modules used include tkinter, itertools, collections, copy and math).
 
 ## Solving strategies
 

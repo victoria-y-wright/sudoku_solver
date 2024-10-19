@@ -1,4 +1,4 @@
-from modules import error_flags
+from modules_2d import error_flags
 
 def check(self,row,col,num):
     for i in range(9):

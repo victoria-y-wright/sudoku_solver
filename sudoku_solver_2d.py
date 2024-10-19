@@ -1,14 +1,8 @@
-import os
-os.chdir("2D Sudoku Solver")
-
 import tkinter as tk
 from copy import deepcopy
 
-from modules import error_flags
-from modules import legal
-from modules import brute_force
-from modules import constraints
-from modules import candidates
+from modules_2d import error_flags, legal, brute_force, constraints, candidates
+
 
 class SudokuSolver:
     def __init__(self, window):

@@ -1,4 +1,4 @@
-from modules import error_flags
+from modules_3d import error_flags
 
 def check(self,pos,num):
     box, sq = pos[0], pos[1]

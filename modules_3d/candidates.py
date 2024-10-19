@@ -1,7 +1,6 @@
 from collections import defaultdict
 
-from modules import legal
-from modules import board_set_up
+from modules_3d import legal, board_set_up
 
 def find_all(self):
     self.candidates = defaultdict(set)

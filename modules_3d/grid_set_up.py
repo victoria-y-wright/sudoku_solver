@@ -1,5 +1,4 @@
-from modules import board_set_up
-from modules import error_flags
+from modules_3d import board_set_up, error_flags
 
 def create_grid(self):
     self.grid = [[0 for x in range(9)] for i in range(len(self.faces))] ## creating the grid

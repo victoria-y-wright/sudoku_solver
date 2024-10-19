@@ -1,4 +1,5 @@
-from modules import board_set_up, grid_set_up
+from modules_3d import board_set_up, grid_set_up
+
 def start(self, index):
 
     lists(self, index)

@@ -1,6 +1,6 @@
 from itertools import combinations
 
-from modules import candidates
+from modules_3d import candidates
 
 # what happens when a number is found
 def found(self, pos, num, method, index = -1):

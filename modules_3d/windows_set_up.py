@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from modules import board_set_up
+from modules_3d import board_set_up
 
 
 def window_1(self):
