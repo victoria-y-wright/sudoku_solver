@@ -1,4 +1,5 @@
 from modules_3d import legal
+from math import log2, ceil
 
 def rec_solve(self, index):
         
@@ -21,10 +22,15 @@ def rec_solve(self, index):
                             self.cnv_board.itemconfigure(self.lbl_cand_square[box][sq][k], state = 'hidden')
                             self.cnv_board.itemconfigure(self.shp_cand_square[box][sq][k], state = 'hidden')
                     self.cnv_board.itemconfigure(self.lbl_square[box][sq], text = self.grid[box][sq])
-                    self.window.after(10,self.window.update())
+                    if self.var_speed_up.get() == 0:
+                        self.window.after(10,self.window.update())
+                    elif self.iterations % (4 * ceil(log2(self.iterations))) == 0:
+                            self.window.after(1,self.window.update())
 
                 if rec_solve(self, index+1):
                     return True
+                self.iterations += 1
+
             self.grid[box][sq] = 0
 
             if self.var_show_iterating.get() == 1:

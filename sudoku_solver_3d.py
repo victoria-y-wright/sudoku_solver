@@ -82,6 +82,10 @@ class SudokuSolver3D:
 
         self.frm_body_buttons.pack_forget()
 
+        self.var_speed_up = tk.IntVar()
+        self.chk_speed_up = tk.Checkbutton(master = self.frm_controls, text = 'Speed up?', font=('TkDefaultFont', 10), variable = self.var_speed_up, onvalue = 1, offvalue = 0)
+        self.chk_speed_up.pack(pady=50)
+
         lbl_show_iterating = tk.Label(master=self.frm_controls, text="Solving via backtracking", font=('TkDefaultFont', 12))
         lbl_show_iterating.pack()
         
@@ -89,6 +93,7 @@ class SudokuSolver3D:
             self.candidates = {pos: cand_list for pos, cand_list in sorted(self.candidates.items(), key= lambda item: len(item[1]))}
         self.squares_list = self.grid_all_squares if self.candidates_found == False else list(self.candidates.keys())
         
+        self.iterations = 1
         if brute_force.rec_solve(self, 0):
             for pos in self.grid_all_squares:
                 i, j = pos[0], pos[1]
@@ -96,7 +101,8 @@ class SudokuSolver3D:
                     for k in range(9):
                         self.cnv_board.itemconfigure(self.lbl_cand_square[i][j][k], state = 'hidden')
                 self.cnv_board.itemconfigure(self.lbl_square[i][j], text = self.grid[i][j])
-            
+
+            self.chk_speed_up.pack_forget()            
             lbl_show_iterating.pack_forget()
             self.solved_grid = deepcopy(self.grid)
             self.lbl_sol = tk.Label(master=self.frm_controls, text="Solved", font=('TkDefaultFont', 14, 'bold'))
@@ -105,6 +111,7 @@ class SudokuSolver3D:
             self.btn_back_to_initial.pack()
 
         else:
+            self.chk_speed_up.pack_forget()            
             lbl_show_iterating.pack_forget()
 
             lbl_no_sol = tk.Label(master=self.frm_controls, text="No solution", font=('TkDefaultFont', 14, 'bold'))

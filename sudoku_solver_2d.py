@@ -44,10 +44,10 @@ class SudokuSolver:
     def set_up_window_1(self):
         
         def set_up_top(self):
-            self.frm_top = tk.Frame(pady = 5)
+            self.frm_top = tk.Frame()
             lbl_title = tk.Label(master=self.frm_top, text='Sudoku Solver', font = ('TkDefaultFont', 15))
             lbl_title.pack()
-            self.frm_top.pack()
+            self.frm_top.pack(pady=5)
         set_up_top(self)
         
         def set_up_board(self):
@@ -105,7 +105,7 @@ class SudokuSolver:
             self.btn_start.pack()
             self.btn_start.bind("<Button-1>", self.start_click)
 
-            self.frm_body_buttons.pack()
+            self.frm_body_buttons.pack(pady=(5,20))
             self.frm_body.pack()
         set_up_body(self)
 
@@ -124,7 +124,7 @@ class SudokuSolver:
             self.lbl_start_paste_ex.configure(state='disabled')
 
             self.btn_start_paste = tk.Button(master=self.frm_bot, text="Start from paste", font=('TkDefaultFont', 10))
-            self.btn_start_paste.pack()
+            self.btn_start_paste.pack(pady=5)
             self.btn_start_paste.bind("<Button-1>", self.start_click)
 
             self.frm_bot.pack()
@@ -211,22 +211,27 @@ class SudokuSolver:
         self.btn_candidates.grid(row = 0, column = 0, padx = (0,70))
         self.btn_brute_force.grid(row = 0, column = 1, padx = (60,0))
         self.chk_show_iterating.grid(row = 1, column = 1, padx = (60,0))
-        self.frm_constr.grid(row = 2, column = 0, columnspan=2, pady = (20,10))
+        self.frm_constr.grid(row = 2, column = 0, columnspan=2, pady = (10))
 
 ### brute force ###
     def brute_force_click(self):
         error_flags.reset(self)
 
         self.frm_body_buttons.pack_forget()
-        self.frm_body.pack()
+        self.frm_body.pack(pady = 20)
+
+        self.var_speed_up = tk.IntVar()
+        self.chk_speed_up = tk.Checkbutton(master = self.frm_body, text = 'Speed up?', font=('TkDefaultFont', 10), variable = self.var_speed_up, onvalue = 1, offvalue = 0)
+        self.chk_speed_up.pack(pady=(0,50))
 
         lbl_show_iterating = tk.Label(master=self.frm_body, text="Solving via backtracking", font=('TkDefaultFont', 12))
-        lbl_show_iterating.pack()
+        lbl_show_iterating.pack(pady=25)
         
         if self.candidates_found == True:
             self.candidates = {pos: cand_list for pos, cand_list in sorted(self.candidates.items(), key= lambda item: len(item[1]))}
         self.squares_list = self.grid_all_squares if self.candidates_found == False else list(self.candidates.keys())
         
+        self.iterations = 1
         if brute_force.rec_solve(self, 0):
             for i in range(9):
                 for j in range(9):
@@ -234,15 +239,17 @@ class SudokuSolver:
                         self.frm_cand_square[i][j].pack_forget()
                         self.ent_number[i][j].pack()
                     self.entry_text[i][j].set(self.grid[i][j])
-            
+
+            self.chk_speed_up.pack_forget()            
             lbl_show_iterating.pack_forget()
             self.solved_grid = deepcopy(self.grid)
             self.lbl_sol = tk.Label(master=self.frm_body, text="Solved", font=('TkDefaultFont', 14, 'bold'))
-            self.lbl_sol.pack()
+            self.lbl_sol.pack(pady=(0,30))
 
-            self.btn_back_to_initial.pack()
+            self.btn_back_to_initial.pack(pady=25)
 
         else:
+            self.chk_speed_up.pack_forget()
             lbl_show_iterating.pack_forget()
 
             lbl_no_sol = tk.Label(master=self.frm_body, text="No solution", font=('TkDefaultFont', 14, 'bold'))
