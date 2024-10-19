@@ -45,7 +45,9 @@ No dependencies are needed outside the standard Python Library (packages/ module
 
 ## Solving strategies
 
-The Sudoku solver can take two differing routes in solving a puzzle, described below:
+The Sudoku solvers offer two different methods to solve a board- brute force or adding constraints.
+
+![Brute force](<images/brute_force.gif>)  ![Adding constraints](<images/adding_constraints.gif>)
 
 ### Brute force
 
