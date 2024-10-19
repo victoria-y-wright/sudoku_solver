@@ -37,9 +37,8 @@ This method is fairly simple to code but no person would ever try to solve a *wh
 (An interesting note is that the brute force method is susceptible to failure- in the worst-case scenario of a puzzle *specifically designed* to be the last set of numbers a brute-force solver will try, it will have to cycle through the ludicrously large set of *all* possible number combinations and can run into timeout erros.)
 
 ### Adding constraints
-The principles of the second method will be familiar to anyone who has filled in a single square of a Sudoku board; it mirrors the classic approach to hand-solving a Sudoku. The rules of the puzzle (numbers 1-9, each appearing once and without repeats in every row, column and box) constrain (or limit) the values each square can take. If a square can't be numbers 1,2,3,4,5,7,8,9 it must be 6; Sudoku strategies all share the eventual goal of *ruling out* candidates from squares, until only the correct numbers remain. When this has been completed across the board, the puzzle has been solved.
 
-The solver offers users a choice of which strategies to apply, visualising the application of each unqiuely, allowing the user to understand what deductions are being made and how. So far, the Solver covers the set of basic strategies commonly found in puzzles (full list below); the plan is to add strategies of increasing complexity in the future.    
+The solver offers users a choice of which strategies to apply; each strategy is visualised uniquely so users can follow the deductions being made. So far, the Solver covers the set of basic strategies commonly found in puzzles (full list below); the plan is to add strategies of increasing complexity in the future.    
 
 The strategies currently added include:
 - Sole candidates (by default)
@@ -49,7 +48,7 @@ The strategies currently added include:
 - Naked triplets
 - Hidden triplets
 
-Excellent descriptions of Sudoku solving strategies can be found at [SudokuWiki](https://www.sudokuwiki.org/Strategy_Families).
+Excellent descriptions of these Sudoku solving strategies (and many others) can be found at [SudokuWiki](https://www.sudokuwiki.org/Strategy_Families).
 
 
 ## Next Steps
