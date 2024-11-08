@@ -1,6 +1,5 @@
 from math import sqrt
 
-
 class Face:
     def __init__(self, type, centre, side_length):
         self.type = type
