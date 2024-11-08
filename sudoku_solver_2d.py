@@ -1,9 +1,9 @@
 import tkinter as tk
 from copy import deepcopy
 
-from modules_gui import error_flags
+from modules.gui import error_flags
 
-from modules_logic import legal, brute_force, constraints, candidates
+from modules.logic import legal, brute_force, constraints, candidates, apply_constraints
 
 class SudokuSolver:
     def __init__(self, window):
@@ -284,7 +284,7 @@ class SudokuSolver:
             candidates.find_all(self)
             self.btn_candidates.configure(state='disabled')
 
-        if constraints.solve_constraints(self):
+        if apply_constraints.until_solved(self):
             self.frm_body.pack(pady=(0,20))
             self.frm_body_buttons.pack_forget()
             self.lbl_sol = tk.Label(master=self.frm_body, text="Solved", font=('TkDefaultFont', 14, 'bold'))
