@@ -1,14 +1,15 @@
 import tkinter as tk
 from copy import deepcopy
 
-from modules_2d import error_flags, legal, brute_force, constraints, candidates
+from modules_gui import error_flags
 
+from modules_logic import legal, brute_force, constraints, candidates
 
 class SudokuSolver:
     def __init__(self, window):
         self.window = window
         self.window.title("Sudoku Solver")
-        self.window.geometry("450x600")
+        self.window.geometry("450x650")
         self.grid = [[None]*9 for x in range(9)]
 
         self.set_up_window_1()
@@ -20,7 +21,6 @@ class SudokuSolver:
     def grid_locations(self):
         self.grid_all_squares = []
         self.grid_rows = []
-        self.grid_cols = []
         for i in range(9):
             new_row = set()
             new_col = set()
@@ -29,7 +29,7 @@ class SudokuSolver:
                 new_col.add((j,i))
                 self.grid_all_squares.append((i,j))
             self.grid_rows.append(new_row)
-            self.grid_cols.append(new_col)
+            self.grid_rows.append(new_col)
 
         self.grid_boxes = []
         for box_row in [0,3,6]:
@@ -75,7 +75,7 @@ class SudokuSolver:
             self.entry_text=[[tk.StringVar() for x in range(9)]  for y in range(9)]
             for i in range(9):
                 for j in range(9):
-                    self.frm_square[i][j] = tk.Frame(master=self.frm_board, relief = 'sunken', bd = 1, bg = 'white', height = 40, width = 40)
+                    self.frm_square[i][j] = tk.Frame(master=self.frm_board, relief = 'sunken', bd = 1, bg = 'white', height = 43, width = 43)
                     self.frm_square[i][j].pack_propagate(False)
 
                     if i in [2,5] and j in [2,5]:
@@ -87,7 +87,7 @@ class SudokuSolver:
                     else:
                         self.frm_square[i][j].grid(row=i,column=j, sticky = 'nsew')
                     
-                    self.ent_number[i][j] = tk.Entry(master=self.frm_square[i][j], width = 3, justify= "center", textvariable= self.entry_text[i][j], font = ('TkDefaultFont', 25, 'bold'), relief = 'flat')
+                    self.ent_number[i][j] = tk.Entry(master=self.frm_square[i][j], width = 3, justify= "center", textvariable= self.entry_text[i][j], font = ('TkDefaultFont', 27, 'bold'), relief = 'flat')
                     self.ent_number[i][j].pack()
 
                     for key in ['<Left>', '<Right>', '<Up>', '<Down>']:
@@ -134,10 +134,10 @@ class SudokuSolver:
     def start_click(self,event):
         error_flags.reset(self)
         
-        board_legal = False
+        input_valid = False
         if event.widget == self.btn_start: #start button
-            if legal.board_is_legal(self):
-                board_legal = True
+            if legal.board_not_empty(self) and legal.board_only_numbers(self):
+                input_valid = True
                 for i in range(9):
                     for j in range(9):
                         if len(self.ent_number[i][j].get()) != 0:
@@ -147,7 +147,7 @@ class SudokuSolver:
         elif event.widget == self.btn_start_paste: #paste start button
             paste_list = self.ent_start_paste.get().strip()
             if paste_list.isdigit() and len(paste_list) == 81:
-                board_legal = True
+                input_valid = True
                 for i in range(9):
                     for j in range(9):
                         self.grid[i][j] = int(paste_list[i*9+j])
@@ -158,20 +158,20 @@ class SudokuSolver:
             else:
                 error_flags.flag(self, 3)
     
-        if board_legal == True:
+        if input_valid == True:
             if legal.board_follows_rules(self):
-                    for i in range(9):
-                        for j in range(9):
-                            if self.grid[i][j] != 0:
-                                    self.ent_number[i][j].config(state=tk.DISABLED)
-                            else:
-                                self.entry_text[i][j].set('')
-                    self.initial_grid = deepcopy(self.grid)
-                    
-                    self.btn_start.pack_forget()
-                    self.btn_start_paste.pack_forget()
-                    self.frm_bot.pack_forget()
-                    self.set_up_window_2()
+                for i in range(9):
+                    for j in range(9):
+                        if self.grid[i][j] != 0:
+                                self.ent_number[i][j].config(state=tk.DISABLED)
+                        else:
+                            self.entry_text[i][j].set('')
+                self.initial_grid = deepcopy(self.grid)
+                
+                self.btn_start.pack_forget()
+                self.btn_start_paste.pack_forget()
+                self.frm_bot.pack_forget()
+                self.set_up_window_2()
 
 ### window 2 ###
     def set_up_window_2(self):

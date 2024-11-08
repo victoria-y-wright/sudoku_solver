@@ -2,7 +2,6 @@ import tkinter as tk
 
 from modules_3d import board_set_up
 
-
 def window_1(self):
     
     def set_up_top(self):

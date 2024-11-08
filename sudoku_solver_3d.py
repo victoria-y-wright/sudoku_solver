@@ -1,7 +1,9 @@
 import tkinter as tk
 from copy import deepcopy
 
-from modules_3d import windows_set_up, examples, board_set_up, grid_set_up, error_flags, legal, brute_force, candidates, constraints
+from modules_3d import windows_set_up, examples, board_set_up, grid_set_up
+from modules_logic import legal, brute_force, candidates, constraints
+from modules_gui import error_flags
 
 
 class SudokuSolver3D:
@@ -14,7 +16,6 @@ class SudokuSolver3D:
         error_flags.set_up(self)
         self.candidates_found = False
         self.grid_all_squares = []
-
 
     def start_example_click(self, event):
         if event.widget == self.btn_ex_1:
@@ -60,7 +61,7 @@ class SudokuSolver3D:
     def start_click(self):
         error_flags.reset(self)
         
-        if legal.board_is_legal(self):
+        if legal.board_not_empty(self):
             if legal.board_follows_rules(self):
                 for pos in self.grid_all_squares:
                     i, j = pos[0], pos[1]

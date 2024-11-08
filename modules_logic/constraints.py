@@ -1,162 +1,34 @@
 from itertools import combinations
 
-from modules_3d import candidates
+from modules_logic import candidates
+from modules_gui import visualisation
 
-# what happens when a number is found
-def found(self, pos, num, method, index = -1):
-    box, sq = pos[0], pos[1]
-    self.grid[box][sq] = num           # update the grid array with the found number
-
-    if method == 'sc':
-        self.cnv_board.itemconfigure(self.shp_cand_square[box][sq][num-1], fill = 'darkolivegreen1')
-        self.chk_constr_list[0].configure(bg = 'darkolivegreen1')
-        self.window.update()
-
-        self.window.after(300, self.window.update())
-        for k in range(9):
-            self.cnv_board.itemconfigure(self.shp_cand_square[box][sq][k], state = 'hidden')
-            self.cnv_board.itemconfigure(self.lbl_cand_square[box][sq][k], state = 'hidden')
-
-        self.cnv_board.itemconfigure(self.lbl_square[box][sq], text = self.grid[box][sq])
-        self.cnv_board.itemconfigure(self.shp_square[box][sq], fill = 'darkolivegreen1')
-        self.window.update()
-
-        self.window.after(300, self.window.update())
-        self.cnv_board.itemconfigure(self.shp_square[box][sq], fill = 'white')
-        # self.window.after(300, self.ent_number[box][sq].configure(bg='white', highlightthickness = 3, highlightbackground = 'darkolivegreen1'))
-        self.chk_constr_list[0].configure(bg = '#F0F0F0')
-
-    if 'hs' in method:
-        if 'row' in method:
-            squares = self.grid_rows[index]
-        elif 'box' in method:
-            squares = self.grid_boxes[index]
-    
-        for pos_sq in squares:
-            if self.grid[pos_sq[0]][pos_sq[1]] == 0:
-                self.cnv_board.itemconfigure(self.shp_cand_square[pos_sq[0]][pos_sq[1]][num-1], fill = '#c2ffff')
-            elif self.grid[pos_sq[0]][pos_sq[1]] == num:
-                self.cnv_board.itemconfigure(self.shp_cand_square[pos_sq[0]][pos_sq[1]][num-1], fill = 'darkslategray1')
-        self.chk_constr_list[1].configure(bg = 'darkslategray1')
-        self.window.update()
-
-        self.window.after(300, self.window.update())
-        for k in range(9):
-            self.cnv_board.itemconfigure(self.shp_cand_square[box][sq][k], state = 'hidden')
-            self.cnv_board.itemconfigure(self.lbl_cand_square[box][sq][k], state = 'hidden')
-
-        self.cnv_board.itemconfigure(self.lbl_square[box][sq], text = self.grid[box][sq])
-        self.cnv_board.itemconfigure(self.shp_square[box][sq], fill = 'darkslategray1')
-
-        self.window.update()
-        
-        for pos_sq in squares:
-            if self.grid[pos_sq[0]][pos_sq[1]] == 0:
-                self.cnv_board.itemconfigure(self.shp_cand_square[pos_sq[0]][pos_sq[1]][num-1], fill = 'white')
-
-        self.window.after(300, self.window.update())
-        self.cnv_board.itemconfigure(self.shp_square[box][sq], fill = 'white')
-        # self.window.after(300, self.ent_number[box][sq].configure(bg='white', highlightthickness = 3, highlightbackground = 'darkslategray1')       
-        self.chk_constr_list[1].configure(bg = '#F0F0F0')
-
+def found_value(self, pos, num, method, group_index=-1):
+    self.grid[pos[0]][pos[1]] = num  
+    visualisation.value(self, pos, method, group_index)
     candidates.update(self, pos, num)
-    self.window.update()
 
-def add_constraint(self, pos_list, group_index, cand_list, remove_list, method):
+def found_constraint(self, pos_list, cand_list, remove_list, method, group_index):
+    visualisation.constraint(self, pos_list, cand_list, remove_list, method, group_index)
     if any(['np' in method, 'nt' in method]):
-
-        if 'np' in method:
-            main_colour = 'orchid1'
-            sec_colour = '#ffbdfc'
-            index = 2
-        elif 'nt' in method:
-            main_colour = 'tan1'
-            sec_colour = '#ffdebf'
-            index = 3
-        
-        for cand in cand_list:
-            for pos in pos_list:
-                self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][cand-1], fill = main_colour)
-            for pos in remove_list:
-                if cand in self.candidates[pos]:
-                    self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][cand-1], fill = sec_colour)
-        self.chk_constr_list[index].configure(bg = main_colour)
-        self.window.update()
-
-        self.window.after(300, self.window.update())
-
         for cand in cand_list:
             for pos in remove_list:
                 if cand in self.candidates[pos]:
-                    candidates.remove(self, pos,cand)
-        self.window.update()
-
-        self.window.after(300, self.window.update())
-        for cand in cand_list:
-            for pos in pos_list:
-                self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][cand-1], fill = 'white')
-
-        self.chk_constr_list[index].configure(bg = '#F0F0F0')
-
+                    self.candidates[pos].remove(cand)
+                    self.cand_locations[cand].remove(pos)
     if any(['hp' in method, 'ht' in method]):
-        if 'row' in method:
-            squares = self.grid_rows[group_index]
-        elif 'box' in method:
-            squares = self.grid_boxes[group_index]
-
-        if 'hp' in method:
-            main_colour = 'palevioletred1'
-            sec_colour = '#ffc9db'
-            index = 4
-        
-        if 'ht' in method:
-            main_colour = 'mediumpurple1'
-            sec_colour = '#dbcaff'
-            index = 5
-
-        for pos in squares:
-            if self.grid[pos[0]][pos[1]] == 0:
-                if pos in pos_list:
-                    for num in range(1,10):
-                        if num in cand_list:
-                            self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = main_colour)
-                        elif num in self.candidates[pos]:
-                            self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = main_colour)
-                else:
-                    for num in cand_list:
-                        self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = sec_colour)
-
-        self.chk_constr_list[index].configure(bg = main_colour)
-        self.window.update()
-
-        self.window.after(500, self.window.update())
-
         for pos in remove_list:
             for num in range(1,10):
                 if num not in cand_list and num in self.candidates[pos]:
-                    candidates.remove(self, pos,num)
-
-        self.window.update()
-
-        self.window.after(300, self.window.update())
-        for pos in squares:
-            if self.grid[pos[0]][pos[1]] == 0:
-                if pos in pos_list:
-                    for num in cand_list:
-                        self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = sec_colour)
-                else:
-                    for num in cand_list:
-                        self.cnv_board.itemconfigure(self.shp_cand_square[pos[0]][pos[1]][num-1], fill = 'white')
-
-        self.chk_constr_list[index].configure(bg = '#F0F0F0')
-    
+                    self.candidates[pos].remove(num)
+                    self.cand_locations[num].remove(pos)
 
 # constraint functions 
 def sole_candidates(self):             # find any squares that only have one candidate
     for pos, cand_list in self.candidates.items():
         if self.grid[pos[0]][pos[1]] == 0:
             if len(cand_list) == 1:
-                found(self, pos, cand_list.pop(), method='sc')
+                found_value(self, pos, cand_list.pop(), method='sc')
                 return True
     return False
 
@@ -168,7 +40,7 @@ def hidden_singles(self):             # find any squares with a candidate that i
                 if len(shared) == 1:
                     pos = shared.pop()
                     if self.grid[pos[0]][pos[1]] == 0:
-                        found(self, pos, num, method=method, index = groups.index(group))
+                        found_value(self, pos, num, method, groups.index(group))
                         return True
 
 def naked_pairs(self):             # add constraints from naked pairs 
@@ -188,7 +60,8 @@ def naked_pairs(self):             # add constraints from naked pairs
                     elif self.grid[pos[0]][pos[1]] == 0 and len(set(naked_cands) & self.candidates[pos]) != 0:     # other squares with the numbers in
                         remove_list.append(pos)
                 if len(naked_list) == 2 and len(remove_list) != 0:
-                    add_constraint(self, naked_list, groups.index(group), naked_cands, remove_list, method)
+                    found_constraint(self, naked_list, naked_cands, remove_list, method, groups.index(group))
+                    pass
                     return True
 
 def naked_triples(self):             # add constraints from naked triples 
@@ -208,7 +81,8 @@ def naked_triples(self):             # add constraints from naked triples
                     elif self.grid[pos[0]][pos[1]] == 0 and len(set(naked_cands) & self.candidates[pos]) != 0:     # other squares with the numbers in
                         remove_list.append(pos)
                 if len(naked_list) == 3 and len(remove_list) != 0:
-                    add_constraint(self, naked_list, groups.index(group), naked_cands, remove_list, method)
+                    found_constraint(self, naked_list, naked_cands, remove_list, method, groups.index(group))
+                    pass
                     return True                          
 
 def hidden_pairs(self):             # add constraints from hidden pairs 
@@ -231,7 +105,8 @@ def hidden_pairs(self):             # add constraints from hidden pairs
                         hidden_list.append(pos)
                         naked_list.append(pos)
                 if len(hidden_list) == 2 and len(naked_list) < 2:
-                    add_constraint(self, hidden_list, groups.index(group), hidden_cands, remove_list, method)
+                    found_constraint(self, hidden_list, hidden_cands, remove_list, method, groups.index(group))
+                    pass
                     return True                   
 
 def hidden_triples(self):             # add constraints from hidden triples 
@@ -254,7 +129,8 @@ def hidden_triples(self):             # add constraints from hidden triples
                         hidden_list.append(pos)
                         naked_list.append(pos)
                 if len(hidden_list) == 3 and len(naked_list) < 3:
-                    add_constraint(self, hidden_list, groups.index(group), hidden_cands, remove_list, method)
+                    found_constraint(self, hidden_list, hidden_cands, remove_list, method, groups.index(group))
+                    pass
                     return True  
 
 
