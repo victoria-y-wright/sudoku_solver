@@ -78,3 +78,8 @@ Excellent descriptions of these Sudoku solving strategies (and many others) can 
 [-] Adding intersection removal strategy (particularly common for 3D Sudokus due to their board configuration)
 
 [-] Adding a step-by-step button for adding of constraints
+
+## Notes
+- mvc architecture
+- license?
+- comment all widgets

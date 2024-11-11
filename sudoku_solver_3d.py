@@ -1,7 +1,9 @@
 import tkinter as tk
 from copy import deepcopy
 
-from modules_3d import windows_set_up, examples, board_set_up, grid_set_up, error_flags, legal, brute_force, candidates, constraints
+from modules.gui.set_up_3d import board_creation, puzzle_entry, windows, widgets, examples
+from modules.logic import legal, brute_force, candidates, apply_constraints
+from modules.gui import error_flags, squares_3d
 
 
 class SudokuSolver3D:
@@ -10,13 +12,11 @@ class SudokuSolver3D:
         self.window.title("3D Sudoku Solver")
         self.window.geometry("1050x650")
 
-        windows_set_up.window_1(self)
+        widgets.create(self)
         error_flags.set_up(self)
-        self.candidates_found = False
-        self.grid_all_squares = []
-
-
-    def start_example_click(self, event):
+        windows.go_to_1(self)
+    
+    def example_puzzle(self, event):
         if event.widget == self.btn_ex_1:
             examples.start(self,1)
         elif event.widget == self.btn_ex_2:
@@ -24,134 +24,86 @@ class SudokuSolver3D:
         elif event.widget == self.btn_ex_3:
             examples.start(self,3)
             
-    def face_click(self,event):
-        board_set_up.choose_face_to_add(self,event)
+    choose_face_to_add = board_creation.choose_face_to_add
+    choose_where_add = board_creation.choose_where_add
+    add_new_face = board_creation.add_new_face
 
-    def button_click(self,event):
-        board_set_up.choose_where_add(self,event)
-
-    def line_click(self,event):
-        board_set_up.add_new_face(self,event)
-
-    def start_board_click(self):
+    def board_created(self):
         error_flags.reset(self)
         
         if len(self.faces) == 1:
             error_flags.flag(self,5)
-        elif not board_set_up.check_3d_board_valid(self):
+        elif not board_creation.check_3d_board_valid(self):
             error_flags.flag(self,6)
         else:
             self.frm_example.pack_forget()
             self.frm_labels.pack_forget()
-            grid_set_up.create_grid(self)
-            grid_set_up.add_elements(self)
+            puzzle_entry.create_grid(self)
+            puzzle_entry.add_elements(self)
 
             ## resize canvas
             region = self.cnv_board.bbox("all")
             self.cnv_board.configure(width = region[2]-region[0]+30, height=region[3]-region[1])
             self.window.maxsize(region[2]-region[0]+420, 650)
 
-    def square_click(self,event):
-        grid_set_up.input_number(self)
+    input_number= puzzle_entry.input_number
+    enter_number = puzzle_entry.enter_number
 
-    def enter_number_click(self,event):
-        grid_set_up.enter_number(self)
-
-    def start_click(self):
+    def puzzle_entered(self):
         error_flags.reset(self)
         
-        if legal.board_is_legal(self):
+        if legal.board_not_empty(self):
             if legal.board_follows_rules(self):
-                for pos in self.grid_all_squares:
-                    i, j = pos[0], pos[1]
-                    self.cnv_board.itemconfigure(self.shp_square[i][j], state = tk.DISABLED)
-                    self.cnv_board.itemconfigure(self.lbl_square[i][j], state = tk.DISABLED)
-                    if self.grid[i][j] != 0:
-                        self.cnv_board.itemconfigure(self.shp_square[i][j], fill = '#f0f0f0')
-                        self.cnv_board.itemconfigure(self.lbl_square[i][j], fill = '#747578')
-                    else:
-                        self.cnv_board.itemconfigure(self.shp_square[i][j], fill = 'white')
+                puzzle_entry.valid_entered(self)
 
-                self.initial_grid = deepcopy(self.grid)
-                self.btn_start.pack_forget()
-                self.lbl_entry_click.pack_forget()
-                windows_set_up.window_2(self)
+                windows.leave_1(self)
+                windows.go_to_2(self)
     
-    def brute_force_click(self):
+    def solve_with_brute_force(self):
         error_flags.reset(self)
 
-        self.frm_body_buttons.pack_forget()
-
-        self.var_speed_up = tk.IntVar()
-        self.chk_speed_up = tk.Checkbutton(master = self.frm_controls, text = 'Speed up?', font=('TkDefaultFont', 10), variable = self.var_speed_up, onvalue = 1, offvalue = 0)
-        self.chk_speed_up.pack(pady=50)
-
-        lbl_show_iterating = tk.Label(master=self.frm_controls, text="Solving via backtracking", font=('TkDefaultFont', 12))
-        lbl_show_iterating.pack()
+        windows.leave_2(self)
+        if self.var_show_iterating.get() == 1:
+            windows.go_to_3(self)
         
-        if self.candidates_found == True:
-            self.candidates = {pos: cand_list for pos, cand_list in sorted(self.candidates.items(), key= lambda item: len(item[1]))}
-        self.squares_list = self.grid_all_squares if self.candidates_found == False else list(self.candidates.keys())
-        
-        self.iterations = 1
-        if brute_force.rec_solve(self, 0):
-            for pos in self.grid_all_squares:
-                i, j = pos[0], pos[1]
-                if self.candidates_found == True:
-                    for k in range(9):
-                        self.cnv_board.itemconfigure(self.lbl_cand_square[i][j][k], state = 'hidden')
-                self.cnv_board.itemconfigure(self.lbl_square[i][j], text = self.grid[i][j])
-
-            self.chk_speed_up.pack_forget()            
-            lbl_show_iterating.pack_forget()
-            self.solved_grid = deepcopy(self.grid)
-            self.lbl_sol = tk.Label(master=self.frm_controls, text="Solved", font=('TkDefaultFont', 14, 'bold'))
-            self.lbl_sol.pack()
-
-            self.btn_back_to_initial.pack()
+        if brute_force.solve(self):
+            if self.var_show_iterating.get() == 1:
+                windows.leave_3(self)
+            else:
+                for pos in self.grid_all_squares:
+                    if self.candidates_found == True:
+                        squares_3d.hide_candidates(self, pos)
+                squares_3d.set_value(self, pos, self.grid[pos[0]][pos[1]])
+            windows.go_to_solved(self)
 
         else:
-            self.chk_speed_up.pack_forget()            
-            lbl_show_iterating.pack_forget()
+            if self.var_show_iterating.get() == 1:
+                windows.leave_3(self)
+            windows.go_to_no_solution(self)
+        
+    def back_to_initial(self):
+        windows.leave_solved(self)
+        windows.go_to_2(self)
 
-            lbl_no_sol = tk.Label(master=self.frm_controls, text="No solution", font=('TkDefaultFont', 14, 'bold'))
-            lbl_no_sol.pack()
-
-    def back_to_initial_click(self):
-        self.btn_back_to_initial.pack_forget()
-        self.lbl_sol.pack_forget()
-        self.frm_body_buttons.pack()
-
-        self.candidates_found = False
-        self.btn_candidates.configure(state='active')
-        self.btn_brute_force.configure(relief='raised')
-
-        self.grid = deepcopy(self.initial_grid)
-        for pos in self.grid_all_squares:
-            i, j = pos[0], pos[1]
-            if self.grid[i][j] == 0:
-                self.cnv_board.itemconfigure(self.lbl_square[i][j], text = '')
-        self.window.update()
-
-    def candidates_click(self):
+    def find_candidates(self):
         candidates.find_all(self)
         self.btn_candidates.configure(state='disabled')
 
-    def apply_constr_click(self):
+    def solve_by_applying_constraints(self):
         error_flags.reset(self)
+
         if self.candidates_found == False:
-            candidates.find_all(self)
-            self.btn_candidates.configure(state='disabled')
+            self.find_candidates()
 
-        if constraints.solve_constraints(self):
-            self.frm_body_buttons.pack_forget()
-            self.lbl_sol = tk.Label(master=self.frm_body, text="Solved", font=('TkDefaultFont', 14, 'bold'))
-            self.lbl_sol.pack()
-            self.btn_back_to_initial.pack()
-
+        solved = False
+        if self.var_step_by_step.get() == 0:
+            solved = apply_constraints.full_solve(self)
         else:
-            error_flags.flag(self, 4)
+            solved = (apply_constraints.one_step(self)) and (0 not in set([x for xs in self.grid for x in xs]))
 
+        if solved is True:
+            windows.leave_2(self)
+            windows.go_to_solved(self)
 
 if __name__ == "__main__":
     window = tk.Tk()
