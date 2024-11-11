@@ -1,5 +1,7 @@
-from modules.gui.set_up_3d import board
-from modules.gui import error_flags
+from modules.gui import squares_3d, error_flags
+
+import tkinter as tk
+from copy import deepcopy
 
 def create_grid(self):
     self.grid = [[0 for x in range(9)] for i in range(len(self.faces))] ## creating the grid
@@ -55,8 +57,6 @@ def create_grid(self):
 
                     self.grid_rows.append(new_row)
 
-
-
 def add_elements(self):
     self.btn_start_board.pack_forget()
     self.cnv_board.configure(closeenough=1)
@@ -68,11 +68,11 @@ def add_elements(self):
     for i in range(len(self.faces)):
         face = self.faces[i]
         for j in range(9):
-            self.squares[i][j] = board.Face(face.type, face.coordinates[j], face.side_length/3)
+            self.squares[i][j] = squares_3d.Face(face.type, face.coordinates[j], face.side_length/3)
             self.shp_square[i][j] = self.cnv_board.create_polygon(self.squares[i][j].vertices, fill = 'white', outline = '', activefill = 'honeydew1')
-            self.cnv_board.tag_bind(self.shp_square[i][j], '<Button-1>', self.square_click)
+            self.cnv_board.tag_bind(self.shp_square[i][j], '<Button-1>', self.input_number)
             self.lbl_square[i][j] = self.cnv_board.create_text(*face.coordinates[j], text = '', font = ('TkDefaultFont', 25, 'bold'))        
-            self.cnv_board.tag_bind(self.lbl_square[i][j], '<Button-1>', self.square_click)
+            self.cnv_board.tag_bind(self.lbl_square[i][j], '<Button-1>', self.input_number)
 
     for shp_face in self.shp_face:
         self.cnv_board.delete(shp_face)
@@ -86,7 +86,7 @@ def add_elements(self):
     self.lbl_entry_click.pack()
     self.btn_start.pack(pady=30, side = 'bottom')
     
-def input_number(self):
+def input_number(self, event):
     
     for pos in self.grid_all_squares:
         i, j = pos[0], pos[1]
@@ -113,7 +113,7 @@ def input_number(self):
 
     self.ent_entry.focus()
 
-def enter_number(self):
+def enter_number(self, event):
     i, j = self.current_pos[0], self.current_pos[1]
 
     error_flags.reset(self)
@@ -137,3 +137,16 @@ def set_number(self, pos, num):
     self.grid[i][j] = int(num)
     self.cnv_board.itemconfigure(self.shp_square[i][j], fill = 'white')
     self.entry_text.set('')
+
+def valid_entered(self):
+    for pos in self.grid_all_squares:
+        i, j = pos[0], pos[1]
+        self.cnv_board.itemconfigure(self.shp_square[i][j], state = tk.DISABLED)
+        self.cnv_board.itemconfigure(self.lbl_square[i][j], state = tk.DISABLED)
+        if self.grid[i][j] != 0:
+            self.cnv_board.itemconfigure(self.shp_square[i][j], fill = '#f0f0f0')
+            self.cnv_board.itemconfigure(self.lbl_square[i][j], fill = '#747578')
+        else:
+            self.cnv_board.itemconfigure(self.shp_square[i][j], fill = 'white')
+
+    self.initial_grid = deepcopy(self.grid)

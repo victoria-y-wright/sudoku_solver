@@ -1,40 +1,39 @@
 from modules.logic.constraints import sole_candidates, hidden_singles, naked_pairs, naked_triples, hidden_pairs, hidden_triples
+from modules.gui import error_flags
 
-# applying constraints recursively 
-def until_solved(self):
-    self.function_list = [None, sole_candidates]
+def create_function_list(self):
+    self.function_list = [sole_candidates]
     for i, function in zip(range(1, len(self.var_constr_list)), [hidden_singles, naked_pairs, naked_triples, hidden_pairs, hidden_triples]):
         if self.var_constr_list[i].get() == 1:
             self.function_list.append(function)
 
-    def create_func_loop(index):
-        def func_loop(self):
-            loop, last_change = 0, 0
-            while last_change == loop:
-                loop += 1
+def full_solve(self):       # applying constraints in order of simple -> complicated until puzzle is solved, or can't progress
+    create_function_list(self)
 
-                if self.function_list[index-1]:
-                    self.method_list[index-2](self)
-
-                if self.function_list[index](self):
-                    last_change = loop
-        return func_loop
-
-    self.method_list = [create_func_loop(index) for index in range(1,len(self.function_list))]
-    self.method_list.append(None)
-
-    solved = lambda self: 0 not in set([x for xs in self.grid for x in xs])
-
-    def solve(self, index):
-        self.method_list[index](self)
-
-        if solved(self):
-            return True
-
-        elif self.method_list[index+1]:
-            return solve(self,index+1)
-
+    index = 0
+    while index < len(self.function_list):
+        if self.function_list[index](self):
+            index = 0
         else:
-            return False
-        
-    return solve(self,0)
+            index += 1
+    
+    solved = lambda self: 0 not in set([x for xs in self.grid for x in xs])
+    if solved(self):
+        return True
+    else:
+        error_flags.flag(self, 4)
+        return False
+
+    
+def one_step(self):         # trying constraints until next step is found
+    create_function_list(self)
+
+    index = 0
+    while index < len(self.function_list):
+        if self.function_list[index](self):
+            return True
+        else:
+            index += 1
+    
+    error_flags.flag(self, 4)
+    return False

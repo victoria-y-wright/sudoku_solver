@@ -4,9 +4,18 @@ if "2d" in __main__.__file__:
 else:
     from modules.gui import squares_3d as squares
 
+def reset_board(self):
+    for pos in self.grid_all_squares:
+        squares.change_square_colour(self, pos, 'white')
+        if self.grid[pos[0]][pos[1]] == 0:
+            for cand in range(1,10):
+                squares.change_cand_colour(self, pos, cand, 'white')
+    for chk_constr in self.chk_constr_list:
+        chk_constr.configure(bg = '#F0F0F0')
+
 def value(self, pos, method, group_index): # used in constraints
-    
     num = self.grid[pos[0]][pos[1]]
+    reset_board(self)
 
     if method == 'sc':
         self.chk_constr_list[0].configure(bg = 'darkolivegreen1')
@@ -18,9 +27,7 @@ def value(self, pos, method, group_index): # used in constraints
         squares.set_value(self, pos, num)  
         squares.change_square_colour(self, pos, 'darkolivegreen1')
         self.window.update()
-        self.window.after(300, squares.change_square_colour(self, pos, 'white'))
-
-        self.chk_constr_list[0].configure(bg = '#F0F0F0')
+        self.window.after(300,self.window.update())
 
     if 'hs' in method:
 
@@ -42,15 +49,11 @@ def value(self, pos, method, group_index): # used in constraints
         squares.set_value(self, pos, num)      
         squares.change_square_colour(self, pos, 'darkslategray1')
         self.window.update()
-        for pos_sq in pos_sqs:
-            if self.grid[pos_sq[0]][pos_sq[1]] == 0:
-                squares.change_cand_colour(self, pos_sq, num, 'white')
-        self.window.after(300, squares.change_square_colour(self, pos, 'white'))
-
-        self.chk_constr_list[1].configure(bg = '#F0F0F0')
+        self.window.after(300,self.window.update())
 
 
 def constraint(self, pos_list, cand_list, remove_list, method, group_index): # used in constraints
+    reset_board(self)
 
     if any(['np' in method, 'nt' in method]):
         if 'np' in method:
@@ -80,16 +83,6 @@ def constraint(self, pos_list, cand_list, remove_list, method, group_index): # u
         self.window.update()
         self.window.after(300, self.window.update())
 
-        for cand in cand_list:
-            for pos in pos_list:
-                squares.change_cand_colour(self, pos, cand,'white')
-            for pos in remove_list:
-                if cand in self.candidates[pos]:
-                    squares.change_cand_colour(self, pos, cand, 'white')
-
-
-        self.chk_constr_list[index].configure(bg = '#F0F0F0')
-
     if any(['hp' in method, 'ht' in method]):
         if 'row' in method:
             pos_sqs = self.grid_rows[group_index]
@@ -99,11 +92,13 @@ def constraint(self, pos_list, cand_list, remove_list, method, group_index): # u
         if 'hp' in method:
             main_colour = 'palevioletred1'
             sec_colour = '#ffc9db'
+            third_colour = '#ffe9f0' 
             index = 4
         
         if 'ht' in method:
             main_colour = 'mediumpurple1'
             sec_colour = '#dbcaff'
+            third_colour = '#eee6ff'
             index = 5
 
         self.chk_constr_list[index].configure(bg = main_colour)
@@ -115,7 +110,7 @@ def constraint(self, pos_list, cand_list, remove_list, method, group_index): # u
                         if num in cand_list:
                             squares.change_cand_colour(self, pos, num, main_colour)
                         elif num in self.candidates[pos]:
-                            squares.change_cand_colour(self, pos, num, sec_colour)
+                            squares.change_cand_colour(self, pos, num, third_colour)
                 else:
                     for num in cand_list:
                         squares.change_cand_colour(self, pos, num, sec_colour)
@@ -131,14 +126,3 @@ def constraint(self, pos_list, cand_list, remove_list, method, group_index): # u
         self.window.update()
 
         self.window.after(300, self.window.update())
-        for pos in pos_sqs:
-            if self.grid[pos[0]][pos[1]] == 0:
-                for num in cand_list:
-                    squares.change_cand_colour(self, pos, num,'white')
-        
-        for pos in remove_list:
-            for num in range(1,10):
-                if num not in cand_list and num in self.candidates[pos]:
-                    squares.change_cand_colour(self, pos, num,'white')
-
-        self.chk_constr_list[index].configure(bg = '#F0F0F0')

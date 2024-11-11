@@ -1,42 +1,5 @@
 from math import sqrt
-
-class Face:
-    def __init__(self, type, centre, side_length):
-        self.type = type
-        self.centre = centre
-        self.side_length = side_length
-        
-        if self.type == 'top':
-            dx_prime = (side_length * sqrt(3)/6 , -side_length/6)
-            dy_prime =  (side_length * sqrt(3)/6 , side_length/6) 
-        elif self.type == 'left':
-            dx_prime = (side_length * sqrt(3)/6 , side_length/6)
-            dy_prime =  (0, side_length/3)
-        elif self.type == 'right':
-            dx_prime = (side_length * sqrt(3)/6 , -side_length/6)
-            dy_prime =  (0, side_length/3)
-
-        self.vertices = []
-        
-        for i,j in zip([-3/2,-3/2,+3/2,+3/2],[-3/2,+3/2,+3/2,-3/2]):
-            self.vertices.extend([round(centre[0] + i*dx_prime[0] + j*dy_prime[0],2), round(centre[1] + i*dx_prime[1] + j*dy_prime[1],2)])
-    
-        self.edges = []
-        for start, end in zip([0,2,4,6], [2,4,6,0]):
-            edge_vertices = sorted([(self.vertices[start], self.vertices[start+1]), (self.vertices[end], self.vertices[end+1])], key = lambda element: (element[0], element[1]))
-            self.edges.append(tuple(edge_vertices))
-        
-        self.coordinates = []
-        for i in [-1,0,1]:
-            for j in [-1,0,1]:
-                self.coordinates.append((centre[0] + j*dx_prime[0] + i*dy_prime[0], centre[1] + j*dx_prime[1] + i*dy_prime[1]))
-
-        self.grid_lines = []
-        for edge,d in zip([self.edges[0],self.edges[3]], [dx_prime, dy_prime]):
-            for i in [1,2]:
-                self.grid_lines.append(((edge[0][0] + i*d[0], edge[0][1] + i*d[1]), (edge[1][0] + i*d[0], edge[1][1] + i*d[1])))
-        
-        self.neighbours =  [None,None,None,None]
+from modules.gui import squares_3d
 
 def choose_face_to_add(self,event):
     for shp_face in self.shp_face:
@@ -82,7 +45,7 @@ def choose_where_add(self, event):
     for index in indices:
         if self.existing_face.neighbours[index] == None:
             self.lines[index] = (self.cnv_board.create_line(self.existing_face.edges[index], width = 4, capstyle = 'round', activefill = 'darkseagreen3'))
-            self.cnv_board.tag_bind(self.lines[index], '<Button-1>', self.line_click)
+            self.cnv_board.tag_bind(self.lines[index], '<Button-1>', self.add_new_face)
 
 def add_new_face(self, event):
     item = self.cnv_board.find_withtag("current")[0]
@@ -140,7 +103,7 @@ def new_face(self, existing_face, new_type, new_location):
             dx = -(side_length* sqrt(3)/ 4) if 'above' in new_location else (side_length* sqrt(3)/ 4)
             dy = -(side_length * 3/4) if 'above' in new_location else (side_length * 3/4)
 
-        self.faces.append(Face('top', (existing_centre[0]+dx, existing_centre[1]+dy), side_length))
+        self.faces.append(squares_3d.Face('top', (existing_centre[0]+dx, existing_centre[1]+dy), side_length))
 
     elif new_type == 'left':
         if existing_type == 'top':   
@@ -159,7 +122,7 @@ def new_face(self, existing_face, new_type, new_location):
             dx = -(side_length * sqrt(3)/ 2) if new_location == 'left' else (side_length * sqrt(3)/ 2)
             dy = 0
         
-        self.faces.append(Face('left', (existing_centre[0]+dx, existing_centre[1]+dy), side_length))
+        self.faces.append(squares_3d.Face('left', (existing_centre[0]+dx, existing_centre[1]+dy), side_length))
 
     elif new_type == 'right':
         if existing_type == 'top':
@@ -178,10 +141,10 @@ def new_face(self, existing_face, new_type, new_location):
                 dx = -(side_length * sqrt(3)/ 2) if new_location == 'left' else (side_length * sqrt(3)/ 2)
                 dy = (side_length/2) if new_location == 'left' else -(side_length/2)
         
-        self.faces.append(Face('right', (existing_centre[0]+dx, existing_centre[1]+dy), side_length))
+        self.faces.append(squares_3d.Face('right', (existing_centre[0]+dx, existing_centre[1]+dy), side_length))
 
     self.shp_face.append(self.cnv_board.create_polygon(self.faces[-1].vertices, fill = 'white', outline = 'black', activefill = 'honeydew1'))
-    self.cnv_board.tag_bind(self.shp_face[-1], '<Button-1>', self.face_click)
+    self.cnv_board.tag_bind(self.shp_face[-1], '<Button-1>', self.choose_face_to_add)
 
     ## scroll canvas
     self.cnv_board.configure(scrollregion = self.cnv_board.bbox("all"))

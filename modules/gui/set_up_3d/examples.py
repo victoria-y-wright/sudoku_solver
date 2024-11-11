@@ -1,4 +1,5 @@
-from modules.gui.set_up_3d import board, grid
+from modules.gui.set_up_3d import board_creation, puzzle_entry
+from modules.gui import squares_3d
 
 def start(self, index):
     lists(self, index)
@@ -7,16 +8,16 @@ def start(self, index):
     self.frm_labels.pack_forget()
 
     self.faces = []
-    self.faces.append(board.Face('top', (300,150), self.side_length))
+    self.faces.append(squares_3d.Face('top', (300,150), self.side_length))
 
     for ef_index, new_type, new_location in zip(self.existing_face_index_list, self.new_type_list, self.new_location_list):
-        board.new_face(self, self.faces[ef_index], new_type, new_location)
+        board_creation.new_face(self, self.faces[ef_index], new_type, new_location)
 
     for line in self.lines:
         self.cnv_board.delete(line)
 
-    grid.create_grid(self)
-    grid.add_elements(self)
+    puzzle_entry.create_grid(self)
+    puzzle_entry.add_elements(self)
 
     ## resize canvas ##
     # region = self.cnv_board.bbox("all")
@@ -24,9 +25,9 @@ def start(self, index):
     # self.window.maxsize(region[2]-region[0]+420, 600)
     
     for pos, num in zip(self.pos_list, self.num_list):
-        grid.set_number(self, pos, num)
+        puzzle_entry.set_number(self, pos, num)
 
-    self.start_click()
+    self.puzzle_entered()
 
 def lists(self, index):
     if index == 1:
