@@ -14,14 +14,15 @@ def hidden_singles(self):             # find any squares with a candidate that i
     for num, pos_list in self.cand_locations.items():
         for method, groups in zip(['hs_box', 'hs_row'], [self.grid_boxes, self.grid_rows]):
             for group in groups:
-                shared = group & pos_list
-                if len(shared) == 1:
-                    pos = shared.pop()
+                pos_in_group = group & pos_list
+                if len(pos_in_group) == 1:
+                    pos = pos_in_group.pop()
                     if self.grid[pos[0]][pos[1]] == 0:
                         found.value(self, pos, num, method, groups.index(group))
                         return True
+    return False
 
-def naked_pairs(self):             # add constraints from naked pairs 
+def naked_pairs(self):             # remove candidates using naked pairs 
     for method, groups in zip(['np_box', 'np_row'], [self.grid_boxes, self.grid_rows]):
         for group in groups:
             candidates_in_group = set()
@@ -41,8 +42,9 @@ def naked_pairs(self):             # add constraints from naked pairs
                     found.constraint(self, naked_list, naked_cands, remove_list, method, groups.index(group))
                     pass
                     return True
+    return False
 
-def naked_triples(self):             # add constraints from naked triples 
+def naked_triples(self):             # remove candidates using naked triples 
     for method, groups in zip(['nt_box', 'nt_row'], [self.grid_boxes, self.grid_rows]):
         for group in groups:
             candidates_in_group = set()
@@ -62,8 +64,9 @@ def naked_triples(self):             # add constraints from naked triples
                     found.constraint(self, naked_list, naked_cands, remove_list, method, groups.index(group))
                     pass
                     return True                          
+    return False
 
-def hidden_pairs(self):             # add constraints from hidden pairs 
+def hidden_pairs(self):             # remove candidates using hidden pairs 
     for method, groups in zip(['hp_box', 'hp_row'], [self.grid_boxes, self.grid_rows]):
         for group in groups:
             candidates_in_group = set()
@@ -73,21 +76,19 @@ def hidden_pairs(self):             # add constraints from hidden pairs
             hidden_combinations = list(combinations(list(candidates_in_group), 2))
             for hidden_cands in hidden_combinations:
                 hidden_list = []
-                naked_list = []
                 remove_list = []
                 for pos in list(group):
-                    if self.grid[pos[0]][pos[1]] == 0 and len((set(range(1,10)) - set(hidden_cands)) & self.candidates[pos]) !=  0 and len((set(hidden_cands)) & self.candidates[pos]) !=  0: # only contains numbers in the combination
+                    if self.grid[pos[0]][pos[1]] == 0 and len((set(hidden_cands)) & self.candidates[pos]) !=  0: # contains numbers in the combination
                         hidden_list.append(pos)
-                        remove_list.append(pos)
-                    elif self.grid[pos[0]][pos[1]] == 0 and len(set(hidden_cands) & self.candidates[pos]) != 0:     # other squares with the numbers in
-                        hidden_list.append(pos)
-                        naked_list.append(pos)
-                if len(hidden_list) == 2 and len(naked_list) < 2:
+                        if len((set(range(1,10)) - set(hidden_cands)) & self.candidates[pos]) !=  0: # also contains other numbers
+                            remove_list.append(pos)
+                if len(hidden_list) == 2 and len(remove_list) > 0:
                     found.constraint(self, hidden_list, hidden_cands, remove_list, method, groups.index(group))
                     pass
                     return True                   
+    return False
 
-def hidden_triples(self):             # add constraints from hidden triples 
+def hidden_triples(self):             # remove candidates using hidden triples 
     for method, groups in zip(['ht_box', 'ht_row'], [self.grid_boxes, self.grid_rows]):
         for group in groups:
             candidates_in_group = set()
@@ -97,16 +98,45 @@ def hidden_triples(self):             # add constraints from hidden triples
             hidden_combinations = list(combinations(list(candidates_in_group), 3))
             for hidden_cands in hidden_combinations:
                 hidden_list = []
-                naked_list = []
                 remove_list = []
                 for pos in list(group):
-                    if self.grid[pos[0]][pos[1]] == 0 and len((set(range(1,10)) - set(hidden_cands)) & self.candidates[pos]) !=  0 and len((set(hidden_cands)) & self.candidates[pos]) !=  0: # only contains numbers in the combination
+                    if self.grid[pos[0]][pos[1]] == 0 and len((set(hidden_cands)) & self.candidates[pos]) !=  0: # contains numbers in the combination
                         hidden_list.append(pos)
-                        remove_list.append(pos)
-                    elif self.grid[pos[0]][pos[1]] == 0 and len(set(hidden_cands) & self.candidates[pos]) != 0:     # other squares with the numbers in
-                        hidden_list.append(pos)
-                        naked_list.append(pos)
-                if len(hidden_list) == 3 and len(naked_list) < 3:
+                        if len((set(range(1,10)) - set(hidden_cands)) & self.candidates[pos]) !=  0: # also contains other numbers
+                            remove_list.append(pos)
+                if len(hidden_list) == 3 and len(remove_list) > 0:
                     found.constraint(self, hidden_list, hidden_cands, remove_list, method, groups.index(group))
-                    pass
                     return True  
+    return False
+
+def intersection_removal(self):                 # remove candidates using pointing pairs/triples or box-line intersection
+    for num, pos_list in self.cand_locations.items():
+        for method, main_groups, intersecting_groups in zip(['ir_point', 'ir_box_line'],[self.grid_boxes, self.grid_rows], [self.grid_rows, self.grid_boxes]):
+            for main_group in main_groups:
+                pos_in_main = main_group & pos_list
+                if len(pos_in_main) == 2 or len(pos_in_main) == 3:
+                    for intersecting_group in intersecting_groups:
+                        if intersecting_group.issuperset(pos_in_main):
+                            pos_in_intersecting = intersecting_group & pos_list
+                            if len(pos_in_intersecting) > len(pos_in_main):
+                                remove_list = list(pos_in_intersecting - pos_in_main)
+                                intersection_list = list(pos_in_main)
+                                found.constraint(self, intersection_list, [num], remove_list, method, main_groups.index(main_group))
+                                return True
+    return False
+
+def intersection_3d(self):
+    for num, pos_list in self.cand_locations.items():
+        for row in self.grid_rows:
+            pos_in_row = pos_list & row
+            if len(pos_in_row) == 2:
+                intersecting_rows = [other_row for other_row in self.grid_rows if len(pos_in_row & other_row) == 1]
+                if len(intersecting_rows) == 2:
+                    common = (intersecting_rows[0] & intersecting_rows[1])
+                    if len(common) != 0:
+                        remove_pos = common.pop()
+                        if remove_pos in pos_list:
+                            intersection_list = list(pos_in_row)
+                            found.constraint(self, intersection_list, [num], [remove_pos], 'ir_3d', self.grid_rows.index(row))
+                            return True
+    return False

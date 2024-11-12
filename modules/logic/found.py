@@ -8,15 +8,22 @@ def value(self, pos, num, method, group_index=-1):
 
 def constraint(self, pos_list, cand_list, remove_list, method, group_index):
     visualisation.constraint(self, pos_list, cand_list, remove_list, method, group_index)
-    if any(['np' in method, 'nt' in method]):
+    if any([method[:2] == 'np', method[:2] == 'nt']):
         for cand in cand_list:
             for pos in remove_list:
                 if cand in self.candidates[pos]:
                     self.candidates[pos].remove(cand)
                     self.cand_locations[cand].remove(pos)
-    if any(['hp' in method, 'ht' in method]):
+    if any([method[:2] == 'hp', method[:2] == 'ht']):
         for pos in remove_list:
             for num in range(1,10):
                 if num not in cand_list and num in self.candidates[pos]:
                     self.candidates[pos].remove(num)
                     self.cand_locations[num].remove(pos)
+    if method[:2] == 'ir':
+        num = cand_list[0]
+        for pos in remove_list:
+            if num in self.candidates[pos]:
+                self.candidates[pos].remove(num)
+                self.cand_locations[num].remove(pos)
+

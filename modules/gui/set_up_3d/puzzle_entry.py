@@ -85,7 +85,7 @@ def add_elements(self):
     
     self.lbl_entry_click.pack()
     self.btn_start.pack(pady=30, side = 'bottom')
-    
+
 def input_number(self, event):
     
     for pos in self.grid_all_squares:
@@ -150,3 +150,21 @@ def valid_entered(self):
             self.cnv_board.itemconfigure(self.shp_square[i][j], fill = 'white')
 
     self.initial_grid = deepcopy(self.grid)
+
+def resize_centre_canvas(self):
+    region = self.cnv_board.bbox("all")
+    board_width = region[2]-region[0]
+    board_height = region[3]-region[1]
+    self.cnv_board.configure(width = board_width+20, height=board_height+20)
+    self.window.maxsize(max(board_width,400)+400, max(550,board_height+120))
+
+    self.cnv_board.configure(scrollregion = self.cnv_board.bbox("all"))
+
+    while self.cnv_board.find_overlapping(self.x_offset,self.y_offset, 600 + self.x_offset, self.y_offset):
+        self.y_offset += 9
+    while self.cnv_board.find_overlapping(self.x_offset, 500 + self.y_offset, 600 + self.x_offset, 500 + self.y_offset):
+        self.y_offset -= 9
+    while self.cnv_board.find_overlapping(self.x_offset,self.y_offset, self.x_offset, 500 + self.y_offset):
+        self.x_offset += 9
+    while self.cnv_board.find_overlapping(600 + self.x_offset,self.y_offset, 600 + self.x_offset, 500 + self.y_offset):
+        self.x_offset -= 9

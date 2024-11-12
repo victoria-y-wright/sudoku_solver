@@ -40,11 +40,7 @@ class SudokuSolver3D:
             self.frm_labels.pack_forget()
             puzzle_entry.create_grid(self)
             puzzle_entry.add_elements(self)
-
-            ## resize canvas
-            region = self.cnv_board.bbox("all")
-            self.cnv_board.configure(width = region[2]-region[0]+30, height=region[3]-region[1])
-            self.window.maxsize(region[2]-region[0]+420, 650)
+            puzzle_entry.resize_centre_canvas(self)
 
     input_number= puzzle_entry.input_number
     enter_number = puzzle_entry.enter_number
@@ -58,6 +54,10 @@ class SudokuSolver3D:
 
                 windows.leave_1(self)
                 windows.go_to_2(self)
+            else:
+                error_flags.flag(self, 2)
+        else:
+            error_flags.flag(self, 1)
     
     def solve_with_brute_force(self):
         error_flags.reset(self)

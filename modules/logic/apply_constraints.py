@@ -1,9 +1,9 @@
-from modules.logic.constraints import sole_candidates, hidden_singles, naked_pairs, naked_triples, hidden_pairs, hidden_triples
+from modules.logic.constraints import sole_candidates, hidden_singles, naked_pairs, naked_triples, hidden_pairs, hidden_triples, intersection_removal, intersection_3d
 from modules.gui import error_flags
 
 def create_function_list(self):
     self.function_list = [sole_candidates]
-    for i, function in zip(range(1, len(self.var_constr_list)), [hidden_singles, naked_pairs, naked_triples, hidden_pairs, hidden_triples]):
+    for i, function in zip(range(1, len(self.var_constr_list)), [hidden_singles, naked_pairs, naked_triples, hidden_pairs, hidden_triples, intersection_removal, intersection_3d]):
         if self.var_constr_list[i].get() == 1:
             self.function_list.append(function)
 

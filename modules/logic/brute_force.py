@@ -10,7 +10,6 @@ else:
     from modules.gui import squares_3d as squares
 
 def solve(self):
-    visualisation.reset_board(self)
     if self.candidates_found == True:
         self.candidates = {pos: cand_list for pos, cand_list in sorted(self.candidates.items(), key= lambda item: len(item[1]))}
     self.squares_list = self.grid_all_squares if self.candidates_found == False else list(self.candidates.keys())

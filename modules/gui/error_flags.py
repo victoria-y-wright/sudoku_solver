@@ -7,7 +7,7 @@ def set_up(self):
                       "Paste a list of 81 digits 1-9 (blank space= 0)",
                       "Try adding another strategy to solve", 
                       "Add faces to create the shape of the 3D sudoku board",
-                      "Invalid 3D Sudoku board- faces must be form lines of 3"]
+                      "Invalid 3D Sudoku board- faces must form lines of 3 (or 1)"]
     self.err_flags = [False for i in range(len(err_flags_text))]
     self.lbl_err_flags = []
     for i in range(len(err_flags_text)):

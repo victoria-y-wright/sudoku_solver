@@ -8,7 +8,7 @@ class SudokuSolver:
     def __init__(self, window):
         self.window = window
         self.window.title("Sudoku Solver")
-        self.window.geometry("450x650")
+        self.window.geometry("750x480")
         self.grid = [[None]*9 for x in range(9)]
 
         widgets.create(self)
@@ -21,9 +21,12 @@ class SudokuSolver:
         
         input_valid = False
         if event.widget == self.btn_start: #start button
-            if legal.board_not_empty(self) and legal.board_only_numbers(self):
+            if legal.board_only_numbers(self):
                 input_valid = True
                 puzzle_entry.from_grid(self)
+            else:
+                error_flags.flag(self, 0)
+
         elif event.widget == self.btn_start_paste: #paste start button
             paste_list = self.ent_start_paste.get().strip()
             if paste_list.isdigit() and len(paste_list) == 81:
@@ -33,11 +36,17 @@ class SudokuSolver:
                 error_flags.flag(self, 3)
     
         if input_valid == True:
-            if legal.board_follows_rules(self):
-                puzzle_entry.valid_entered(self)
-                
-                windows.leave_1(self)
-                windows.go_to_2(self)
+            if legal.board_not_empty(self):
+                if legal.board_follows_rules(self):
+                    puzzle_entry.valid_entered(self)
+                    
+                    windows.leave_1(self)
+                    windows.go_to_2(self)
+                else:
+                    error_flags.flag(self, 2)
+            else:
+                error_flags.flag(self, 1)
+
 
 
 ### brute force ###

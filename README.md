@@ -75,11 +75,13 @@ Excellent descriptions of these Sudoku solving strategies (and many others) can 
 <br/> 
 
 ## Next Steps
-[-] Adding intersection removal strategy (particularly common for 3D Sudokus due to their board configuration)
+[X] Adding intersection removal strategy (particularly common for 3D Sudokus due to their board configuration)
 
-[-] Adding a step-by-step button for adding of constraints
+[X] Adding a step-by-step button for adding of constraints
+
+[ ] Adding X-wing and Y-wing strategies
 
 ## Notes
 - mvc architecture
 - license?
-- comment all widgets
+- comment widgets

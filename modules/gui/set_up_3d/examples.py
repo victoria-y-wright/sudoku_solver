@@ -18,11 +18,7 @@ def start(self, index):
 
     puzzle_entry.create_grid(self)
     puzzle_entry.add_elements(self)
-
-    ## resize canvas ##
-    # region = self.cnv_board.bbox("all")
-    # self.cnv_board.configure(width = region[2]-region[0]+30, height=region[3]-region[1])
-    # self.window.maxsize(region[2]-region[0]+420, 600)
+    puzzle_entry.resize_centre_canvas(self)
     
     for pos, num in zip(self.pos_list, self.num_list):
         puzzle_entry.set_number(self, pos, num)
