@@ -4,10 +4,10 @@ from modules.logic import legal
 from modules.gui import visualisation
 
 import __main__
-if "2d" in __main__.__file__:
-    from modules.gui import squares_2d as squares
-else:
+if "3d" in __main__.__file__:
     from modules.gui import squares_3d as squares
+else:
+    from modules.gui import squares_2d as squares
 
 def solve(self):
     if self.candidates_found == True:

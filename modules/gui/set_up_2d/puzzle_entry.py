@@ -3,7 +3,7 @@ import tkinter as tk
 
 def grid_creation(self):
     self.grid_all_squares = []
-    self.grid_rows = []
+    self.grid_lines = []
     for i in range(9):
         new_row = set()
         new_col = set()
@@ -11,8 +11,8 @@ def grid_creation(self):
             new_row.add((i,j))
             new_col.add((j,i))
             self.grid_all_squares.append((i,j))
-        self.grid_rows.append(new_row)
-        self.grid_rows.append(new_col)
+        self.grid_lines.append(new_row)
+        self.grid_lines.append(new_col)
 
     self.grid_boxes = []
     for box_row in [0,3,6]:

@@ -1,8 +1,8 @@
 import __main__
-if "2d" in __main__.__file__:
-    from modules.gui import squares_2d as squares
-else:
+if "3d" in __main__.__file__:
     from modules.gui import squares_3d as squares
+else:
+    from modules.gui import squares_2d as squares
 
 def reset_board(self):
     for pos in self.grid_all_squares:
@@ -31,8 +31,8 @@ def value(self, pos, method, group_index): # used in constraints
 
     if method[:2] == 'hs':
 
-        if 'row' in method:
-            pos_sqs = self.grid_rows[group_index]
+        if 'line' in method:
+            pos_sqs = self.grid_lines[group_index]
         elif 'box' in method:
             pos_sqs = self.grid_boxes[group_index]
     
@@ -84,8 +84,8 @@ def constraint(self, pos_list, cand_list, remove_list, method, group_index): # u
         self.window.after(300, self.window.update())
 
     if any([method[:2] =='hp', method[:2] =='ht']):
-        if 'row' in method:
-            pos_sqs = self.grid_rows[group_index]
+        if 'line' in method:
+            pos_sqs = self.grid_lines[group_index]
         elif 'box' in method:
             pos_sqs = self.grid_boxes[group_index]
 
@@ -141,7 +141,7 @@ def constraint(self, pos_list, cand_list, remove_list, method, group_index): # u
         if 'point' in method:
             pos_sqs = self.grid_boxes[group_index]
         elif 'box_line' in method or '3d' in method:
-            pos_sqs = self.grid_rows[group_index]
+            pos_sqs = self.grid_lines[group_index]
             
         self.chk_constr_list[index].configure(bg = sec_colour)
 
