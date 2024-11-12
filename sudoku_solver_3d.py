@@ -87,6 +87,7 @@ class SudokuSolver3D:
 
     def find_candidates(self):
         candidates.find_all(self)
+        
         self.btn_candidates.configure(state='disabled')
 
     def solve_by_applying_constraints(self):

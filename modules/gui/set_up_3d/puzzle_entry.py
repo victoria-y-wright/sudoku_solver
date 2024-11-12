@@ -6,7 +6,7 @@ from copy import deepcopy
 def create_grid(self):
     self.grid = [[0 for x in range(9)] for i in range(len(self.faces))] ## creating the grid
 
-    self.grid_boxes, self.grid_rows = [], []
+    self.grid_boxes, self.grid_lines = [], []
     self.grid_all_squares = []
 
     for i in range(len(self.faces)):
@@ -21,41 +21,41 @@ def create_grid(self):
         # for middle faces
         if any([(face.neighbours[x] is not None) and (face.neighbours[y] is not None) for x,y in zip([0,1],[2,3])]):
             for j in range(3):
-                new_row = set()
+                new_line = set()
                 if (face.neighbours[0] is not None) and (face.neighbours[2] is not None):
-                    new_row.update([(i,3*j), (i,3*j+1), (i,3*j+2)])
+                    new_line.update([(i,3*j), (i,3*j+1), (i,3*j+2)])
                     i_nb_a, i_nb_b = face.neighbours[0], face.neighbours[2]
                     f_nb_a, f_nb_b = self.faces[i_nb_a], self.faces[i_nb_b]
 
                     if (f_nb_a.neighbours[0] == i) or (f_nb_a.neighbours[2] == i):
-                        new_row.update([(i_nb_a,3*j), (i_nb_a,3*j+1), (i_nb_a,3*j+2)])
+                        new_line.update([(i_nb_a,3*j), (i_nb_a,3*j+1), (i_nb_a,3*j+2)])
                     elif (f_nb_a.neighbours[1] == i) or (f_nb_a.neighbours[3] == i):
-                        new_row.update([(i_nb_a,j), (i_nb_a,j+3), (i_nb_a,j+6)])
+                        new_line.update([(i_nb_a,j), (i_nb_a,j+3), (i_nb_a,j+6)])
 
                     if (f_nb_b.neighbours[0] == i) or (f_nb_b.neighbours[2] == i):
-                        new_row.update([(i_nb_b,3*j), (i_nb_b,3*j+1), (i_nb_b,3*j+2)])
+                        new_line.update([(i_nb_b,3*j), (i_nb_b,3*j+1), (i_nb_b,3*j+2)])
                     elif (f_nb_b.neighbours[1] == i) or (f_nb_b.neighbours[3] == i):
-                        new_row.update([(i_nb_b,j), (i_nb_b,j+3), (i_nb_b,j+6)])
+                        new_line.update([(i_nb_b,j), (i_nb_b,j+3), (i_nb_b,j+6)])
 
-                    self.grid_rows.append(new_row)
+                    self.grid_lines.append(new_line)
 
-                new_row = set()
+                new_line = set()
                 if (face.neighbours[1] is not None) and (face.neighbours[3] is not None):
-                    new_row.update([(i,j), (i,j+3), (i,j+6)])
+                    new_line.update([(i,j), (i,j+3), (i,j+6)])
                     i_nb_a, i_nb_b = face.neighbours[1], face.neighbours[3]
                     f_nb_a, f_nb_b = self.faces[i_nb_a], self.faces[i_nb_b]
 
                     if (f_nb_a.neighbours[0] == i) or (f_nb_a.neighbours[2] == i):
-                        new_row.update([(i_nb_a,3*j), (i_nb_a,3*j+1), (i_nb_a,3*j+2)])
+                        new_line.update([(i_nb_a,3*j), (i_nb_a,3*j+1), (i_nb_a,3*j+2)])
                     elif (f_nb_a.neighbours[1] == i) or (f_nb_a.neighbours[3] == i):
-                        new_row.update([(i_nb_a,j), (i_nb_a,j+3), (i_nb_a,j+6)])
+                        new_line.update([(i_nb_a,j), (i_nb_a,j+3), (i_nb_a,j+6)])
 
                     if (f_nb_b.neighbours[0] == i) or (f_nb_b.neighbours[2] == i):
-                        new_row.update([(i_nb_b,3*j), (i_nb_b,3*j+1), (i_nb_b,3*j+2)])
+                        new_line.update([(i_nb_b,3*j), (i_nb_b,3*j+1), (i_nb_b,3*j+2)])
                     elif (f_nb_b.neighbours[1] == i) or (f_nb_b.neighbours[3] == i):
-                        new_row.update([(i_nb_b,j), (i_nb_b,j+3), (i_nb_b,j+6)])
+                        new_line.update([(i_nb_b,j), (i_nb_b,j+3), (i_nb_b,j+6)])
 
-                    self.grid_rows.append(new_row)
+                    self.grid_lines.append(new_line)
 
 def add_elements(self):
     self.btn_start_board.pack_forget()

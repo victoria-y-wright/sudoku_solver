@@ -1,7 +1,7 @@
 from modules.gui import error_flags
 
 def check(self,pos,num):
-    for groups in [self.grid_rows, self.grid_boxes]:
+    for groups in [self.grid_lines, self.grid_boxes]:
         for group in groups:
             if pos in group:
                 for position in list(group):

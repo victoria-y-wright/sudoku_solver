@@ -12,7 +12,7 @@ def sole_candidates(self):             # find any squares that only have one can
 
 def hidden_singles(self):             # find any squares with a candidate that is unique in its row/column/box   
     for num, pos_list in self.cand_locations.items():
-        for method, groups in zip(['hs_box', 'hs_row'], [self.grid_boxes, self.grid_rows]):
+        for method, groups in zip(['hs_box', 'hs_line'], [self.grid_boxes, self.grid_lines]):
             for group in groups:
                 pos_in_group = group & pos_list
                 if len(pos_in_group) == 1:
@@ -23,7 +23,7 @@ def hidden_singles(self):             # find any squares with a candidate that i
     return False
 
 def naked_pairs(self):             # remove candidates using naked pairs 
-    for method, groups in zip(['np_box', 'np_row'], [self.grid_boxes, self.grid_rows]):
+    for method, groups in zip(['np_box', 'np_line'], [self.grid_boxes, self.grid_lines]):
         for group in groups:
             candidates_in_group = set()
             for pos in list(group):
@@ -45,7 +45,7 @@ def naked_pairs(self):             # remove candidates using naked pairs
     return False
 
 def naked_triples(self):             # remove candidates using naked triples 
-    for method, groups in zip(['nt_box', 'nt_row'], [self.grid_boxes, self.grid_rows]):
+    for method, groups in zip(['nt_box', 'nt_line'], [self.grid_boxes, self.grid_lines]):
         for group in groups:
             candidates_in_group = set()
             for pos in list(group):
@@ -67,7 +67,7 @@ def naked_triples(self):             # remove candidates using naked triples
     return False
 
 def hidden_pairs(self):             # remove candidates using hidden pairs 
-    for method, groups in zip(['hp_box', 'hp_row'], [self.grid_boxes, self.grid_rows]):
+    for method, groups in zip(['hp_box', 'hp_line'], [self.grid_boxes, self.grid_lines]):
         for group in groups:
             candidates_in_group = set()
             for pos in list(group):
@@ -89,7 +89,7 @@ def hidden_pairs(self):             # remove candidates using hidden pairs
     return False
 
 def hidden_triples(self):             # remove candidates using hidden triples 
-    for method, groups in zip(['ht_box', 'ht_row'], [self.grid_boxes, self.grid_rows]):
+    for method, groups in zip(['ht_box', 'ht_line'], [self.grid_boxes, self.grid_lines]):
         for group in groups:
             candidates_in_group = set()
             for pos in list(group):
@@ -111,7 +111,7 @@ def hidden_triples(self):             # remove candidates using hidden triples
 
 def intersection_removal(self):                 # remove candidates using pointing pairs/triples or box-line intersection
     for num, pos_list in self.cand_locations.items():
-        for method, main_groups, intersecting_groups in zip(['ir_point', 'ir_box_line'],[self.grid_boxes, self.grid_rows], [self.grid_rows, self.grid_boxes]):
+        for method, main_groups, intersecting_groups in zip(['ir_point', 'ir_box_line'],[self.grid_boxes, self.grid_lines], [self.grid_lines, self.grid_boxes]):
             for main_group in main_groups:
                 pos_in_main = main_group & pos_list
                 if len(pos_in_main) == 2 or len(pos_in_main) == 3:
@@ -127,16 +127,16 @@ def intersection_removal(self):                 # remove candidates using pointi
 
 def intersection_3d(self):
     for num, pos_list in self.cand_locations.items():
-        for row in self.grid_rows:
-            pos_in_row = pos_list & row
-            if len(pos_in_row) == 2:
-                intersecting_rows = [other_row for other_row in self.grid_rows if len(pos_in_row & other_row) == 1]
-                if len(intersecting_rows) == 2:
-                    common = (intersecting_rows[0] & intersecting_rows[1])
+        for line in self.grid_lines:
+            pos_in_line = pos_list & line
+            if len(pos_in_line) == 2:
+                intersecting_lines = [other_line for other_line in self.grid_lines if len(pos_in_line & other_line) == 1]
+                if len(intersecting_lines) == 2:
+                    common = (intersecting_lines[0] & intersecting_lines[1])
                     if len(common) != 0:
                         remove_pos = common.pop()
                         if remove_pos in pos_list:
-                            intersection_list = list(pos_in_row)
-                            found.constraint(self, intersection_list, [num], [remove_pos], 'ir_3d', self.grid_rows.index(row))
+                            intersection_list = list(pos_in_line)
+                            found.constraint(self, intersection_list, [num], [remove_pos], 'ir_3d', self.grid_lines.index(line))
                             return True
     return False

@@ -3,10 +3,10 @@ from collections import defaultdict
 from modules.logic import legal
 
 import __main__
-if "2d" in __main__.__file__:
-    from modules.gui import squares_2d as squares
-else:
+if "3d" in __main__.__file__:
     from modules.gui import squares_3d as squares
+else:
+    from modules.gui import squares_2d as squares
 
 def find_all(self):
     self.candidates = defaultdict(set)
@@ -27,7 +27,7 @@ def find_all(self):
 
 def update(self,pos,num):
     for pos_sq, cand_list in self.candidates.items():
-        for groups in [self.grid_boxes, self.grid_rows]:
+        for groups in [self.grid_boxes, self.grid_lines]:
             for group in groups:
                 if group.issuperset({pos,pos_sq}):
                     if num in cand_list:

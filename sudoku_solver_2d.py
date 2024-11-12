@@ -48,7 +48,6 @@ class SudokuSolver:
                 error_flags.flag(self, 1)
 
 
-
 ### brute force ###
     def solve_with_brute_force(self):
         error_flags.reset(self)
@@ -81,6 +80,7 @@ class SudokuSolver:
 ### constraints ###
     def find_candidates(self):
         candidates.find_all(self)
+        
         self.btn_candidates.configure(state='disabled')
 
     def solve_by_applying_constraints(self):
