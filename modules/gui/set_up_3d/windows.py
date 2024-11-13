@@ -38,6 +38,7 @@ def leave_solved(self):
         i, j = pos[0], pos[1]
         if self.grid[i][j] == 0:
             self.cnv_board.itemconfigure(self.lbl_square[i][j], text = '')
+    self.candidates_found = False
     self.window.update()
     
 def go_to_no_solution(self):

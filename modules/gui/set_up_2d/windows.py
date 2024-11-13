@@ -40,6 +40,7 @@ def leave_solved(self):
         for j in range(9):
             if self.grid[i][j] == 0:
                 self.entry_text[i][j].set('')
+    self.candidates_found = False
     self.window.update()
 
 def go_to_no_solution(self):
