@@ -1,5 +1,4 @@
 import tkinter as tk
-from copy import deepcopy
 
 from modules.gui.set_up_3d import board_creation, puzzle_entry, windows, widgets, examples
 from modules.logic import legal, brute_force, candidates, apply_constraints

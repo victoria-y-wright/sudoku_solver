@@ -19,6 +19,7 @@ def choose_face_to_add(self,event):
     self.lbl_choose_face.pack()
     self.cnv_buttons.pack()
 
+
 def choose_where_add(self, event):
 
     self.lbl_choose_where.pack()
@@ -46,6 +47,7 @@ def choose_where_add(self, event):
         if self.existing_face.neighbours[index] == None:
             self.lines[index] = (self.cnv_board.create_line(self.existing_face.edges[index], width = 4, capstyle = 'round', activefill = 'darkseagreen3'))
             self.cnv_board.tag_bind(self.lines[index], '<Button-1>', self.add_new_face)
+
 
 def add_new_face(self, event):
     item = self.cnv_board.find_withtag("current")[0]
@@ -83,6 +85,7 @@ def add_new_face(self, event):
     self.lbl_choose_where.pack_forget()
     for line in self.lines:
         self.cnv_board.delete(line)
+
 
 def new_face(self, existing_face, new_type, new_location):
 
@@ -163,6 +166,7 @@ def new_face(self, existing_face, new_type, new_location):
         if len(shared_edges) == 1:
             self.faces[-1].neighbours[self.faces[-1].edges.index(shared_edges[0])] = self.faces.index(face)
             face.neighbours[face.edges.index(shared_edges[0])] = len(self.faces) - 1
+
 
 def check_3d_board_valid(self):
     for face_index in range(len(self.faces)):
